@@ -1,73 +1,76 @@
 import styles from './Signup.module.css'
-import img from '../../assets/img.png'
+import {FormInput} from "../FormInput";
+import {useState} from "react";
+import {emailValidation, passwordValidation, nameValidation, lNameValidation, companyValidation, passwordCheck, nameInputs, inputs} from "../../Validation functions/vFunc.js";
+import {Link} from "react-router-dom";
 
 export const SignUp = () => {
+    const [values, setValues] = useState({
+            firstname: "",
+            lastname: "",
+            companyname: "",
+            email: "",
+            password: "",
+            confirmpassword: "",
+        }
+    )
+
+
+    const onChange = (e) =>{
+        setValues({...values, [e.target.name]: e.target.value} );
+        setErrors({
+            ...errors,
+            [e.target.name]: '',
+        })
+    };
+
+    const [errors, setErrors] = useState({});
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        nameValidation(values, setErrors);
+        lNameValidation(values, setErrors);
+        companyValidation(values, setErrors);
+        emailValidation(values, setErrors);
+        passwordValidation(values, setErrors);
+        passwordCheck(values, setErrors);
+    }
     return (
         <div className={styles.content}>
-            <form action="/" className={styles.form}>
-                <h1 className={styles.signH1}>Create an account</h1>
-                <div className={styles.nameBox}>
-                    <div>
-                        <label htmlFor="firstname" className={styles.label}>
-                            First name
-                        </label>
-                        <input name="firstname"
-                               type="text"
-                               placeholder="First name"
-                               className={styles.input}/>
+            <div className={styles.form_flexbox}>
+                <form
+                  className={styles.form}
+                  onSubmit={handleSubmit}
+                >
+                    <h1 className={styles.signH1}>Create an account</h1>
+                    <div className={styles.nameBox}>
+                        {nameInputs.map((input) => (
+                            <FormInput
+                                key={input.id}
+                                {...input}
+                                errors={errors}
+                                value={values[input.name]}
+                                onChange={onChange}
+                            />
+                        ))}
                     </div>
-                    <div>
-                        <label htmlFor="lastname" className={styles.label}>
-                            Last name
-                        </label>
-                        <input name="lastname"
-                               type="text"
-                               placeholder="Last name"
-                               className={styles.input}/>
-                    </div>
-                </div>
-                <div className={styles.test}>
-                    <label htmlFor="companyname" className={styles.label}>
-                        Company name
-                    </label>
-                    <input name="companyname"
-                           type="text"
-                           placeholder="Company name"
-                           className={styles.input}/>
-                </div>
-                <div>
-                    <label htmlFor="email" className={styles.label}>
-                        Email
-                    </label>
-                    <input name="email"
-                           type="text"
-                           placeholder="Email"
-                           className={styles.input}/>
-                </div>
-                <div>
-                    <label htmlFor="password" className={styles.label}>
-                        Password
-                    </label>
-                    <input name="password"
-                           type="text"
-                           placeholder="Enter password"
-                           className={styles.input}/>
-                </div>
-                <div>
-                    <label htmlFor="repeatpassword" className={styles.label}>
-                        Repeat password
-                    </label>
-                    <input name="repeatpassword"
-                           type="text"
-                           placeholder="Repeat password"
-                           className={styles.input}/>
-                </div>
-                <input type="submit" value="Log in" className={styles.submit}/>
-                <span>Already have an account? <a href="">Log in</a></span>
-            </form>
-            <div className={styles.image}>
-                <img src={img} alt=""/>
+                    {inputs.map((input) => (
+                        <FormInput
+                            key={input.id}
+                            {...input}
+                            errors={errors}
+                            value={values[input.name]}
+                            onChange={onChange}
+                        />
+                        ))}
+                    <input
+                        type="submit"
+                        value="Log in"
+                        className={styles.submit}/>
+                    <span>Already have an account? <Link to="/login"> Log in! </Link></span>
+                </form>
             </div>
+            <div className={styles.image}></div>
         </div>
     )
 }

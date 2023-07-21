@@ -1,10 +1,13 @@
-import {SignIn} from "./components/SignIn";
-// import {SignUp} from "./components/SignUp";
+import {SignUp} from "./components/SignUp";
+import {Routes, Route} from "react-router-dom";
+import {SignIn} from "./components/SignIn/index.js";
 export const App = () => {
     return (
         <>
-            <SignIn />
-            {/*<SignUp />*/}
+            <Routes>
+                <Route path="/register" element={<SignUp />} />
+                <Route path="/login" element={<SignIn />} />
+            </Routes>
         </>
     )
 }
