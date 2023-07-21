@@ -1,0 +1,100 @@
+html body{
+    font-family: Inter, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    overflow-y: hidden;
+    height: 100%;
+}
+.container{
+    display: flex;
+    padding-right: 56px;
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 138px;
+    width: calc(100vw - (280px + 56px + 56px));
+}
+.aside {
+    min-width: 280px;
+    overflow-y: hidden;
+    height: 100%;
+    margin-right: 56px;
+}
+.logoBox {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 138px;
+}
+.linkBox{
+     display: flex;
+     flex-direction: column;
+     justify-content: space-between;
+     height: calc(100vh - 138px);
+ }
+.linkBox_{
+    display: flex;
+    flex-direction: column;
+}
+.toplink {
+    display: flex;
+    flex-direction: column;
+}
+.link {
+    cursor: pointer;
+    border: none;
+    height: 56px;
+    margin-bottom: 4px;
+    padding-left: 40px;
+    display: flex;
+    align-items: center;
+    opacity: 0.5;
+}
+.link_ {
+    cursor: pointer;
+    opacity: 1;
+    margin-bottom: 4px;
+    height: 56px;
+    padding-left: 40px;
+    display: flex;
+    align-items: center;
+    border-right: 2px solid #5382E7;
+    color: #5382E7;
+    background-color: rgba(0, 0, 0, 0.03);
+}
+.svg{
+    margin-right: 8px;
+}
+hr {
+    width: 80%;
+}
+.content {
+    border: 2px solid green;
+    height: 100%;
+}
+.button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 200px;
+    color: #fff;
+    height: 52px;
+    border-radius: 3px;
+    border: none;
+    background-color: #5382E7;
+    cursor: pointer;
+}
+.h1{
+    color: #2B3844;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+.h5{
+    color: #2B3844;
+    font-size: 14px;
+    font-weight: 400;
+}
