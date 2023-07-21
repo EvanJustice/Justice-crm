@@ -14,8 +14,6 @@ export const SignUp = () => {
             confirmpassword: "",
         }
     )
-
-
     const onChange = (e) =>{
         setValues({...values, [e.target.name]: e.target.value} );
         setErrors({
@@ -23,9 +21,7 @@ export const SignUp = () => {
             [e.target.name]: '',
         })
     };
-
     const [errors, setErrors] = useState({});
-
     const handleSubmit = (e) => {
         e.preventDefault();
         nameValidation(values, setErrors);
