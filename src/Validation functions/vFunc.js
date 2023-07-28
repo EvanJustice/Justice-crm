@@ -82,7 +82,6 @@ export const passwordCheck = (values, setErrors) => {
             ...prevState,
             confirmpassword: 'Passwords mismatch!',
         }));
-        console.log('ploxo');
     }
 }
 

@@ -8,11 +8,13 @@ import {ReactComponent as Logout} from "../../assets/Logout.svg";
 import {ReactComponent as Create} from "../../assets/Create.svg";
 import {useState} from "react";
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
+import {ModalProduct} from "../ModalProduct/ModalProduct.jsx";
+
 
 const linksArray = [
     {
         name: 'Main Page',
-        img: <Home className={styles.svg}/>,
+        img: <Home  className={styles.svg}/>,
         id: 0,
         link: '/'
     },
@@ -34,10 +36,10 @@ const linksArray = [
         id: 3,
         link: '/cabinet'
     }]
-export const Layout = (props) => {
-    console.log(props)
+// eslint-disable-next-line react/prop-types
+export const Layout = ({tableData, setTableData, modal, setModal, data}) => {
     const [active, setActive] = useState(null)
-
+    const[errors, setErrors] = useState("")
     const navigate = useNavigate();
     const history = useLocation();
     const titles = (linkName) => {
@@ -57,9 +59,13 @@ export const Layout = (props) => {
 
         }
     }
+
     const onClick = (id) =>{
         setActive(id);
     };
+    const click = () => {
+        setModal(!modal)
+    }
     return (
         <div className={styles.container}>
             <aside className={styles.aside}>
@@ -71,10 +77,15 @@ export const Layout = (props) => {
                         {linksArray?.map((el) => (
                                 <div
                                     key={el?.id}
-                                    className={active === el?.id ? styles.link_ : styles.link}
-                                    onClick={() => {onClick(el?.id)
-                                        navigate(el?.link)}
-                                        }
+                                    className={
+                                        active === el?.id
+                                            ? styles.link_
+                                            : styles.link
+                                    }
+                                    onClick={() => {
+                                        onClick(el?.id)
+                                        navigate(el?.link)
+                                    }}
                                 >
                                     {el?.img}
                                     {el?.name}
@@ -97,9 +108,18 @@ export const Layout = (props) => {
                         {/* eslint-disable-next-line react/prop-types */}
                         <h5 className={styles.h5}>{titles(history.pathname)?.subtitle}</h5>
                     </div>
-                    <button className={styles.button}><Create className={styles.svg}/> Create a product</button>
+                    <button className={styles.button} onClick={click}><Create className={styles.svg}/> Create a product</button>
                 </header>
                 <hr style={{marginBottom: '40px'}}/>
+                <ModalProduct
+                    errors={errors}
+                    setErrors={setErrors}
+                    tableData={tableData}
+                    setTableData={setTableData}
+                    modal={modal}
+                    setModal={setModal}
+                    data={data}
+                />
                 <Outlet />
             </div>
         </div>
