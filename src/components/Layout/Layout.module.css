@@ -64,10 +64,16 @@ html body{
     border-right: 2px solid #5382E7;
     color: #5382E7;
     background-color: rgba(0, 0, 0, 0.03);
+
+}
+.link_ .svg {
+    stroke: #5382E7;
 }
 .svg{
     margin-right: 8px;
+    stroke: black;
 }
+
 hr {
     width: 80%;
 }
