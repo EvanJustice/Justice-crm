@@ -36,8 +36,8 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
                 setTableData([
                     {
                         ...value,
-                        key: tableData.length,
-                        address: 'Krylatskaya street',
+                        key: (new Date).getTime(),
+                        address: 'Krylatskaya str.',
                         creationDate: '05.07.2021'
                     },
                     ...tableData]
@@ -67,7 +67,7 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
                 {
                     // eslint-disable-next-line react/prop-types
                     data.map((el) => (
-                        <>
+                        <div key={el.key}>
                             <span style={{color: 'red'}}>{error[el?.name]}</span>
                             <input
                                 className={styles.input}
@@ -75,12 +75,12 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
                                     number : el?.name === 'remains' ?
                                         number : el?.name ==='weight' ?
                                             number : text }
-                                key={el.key}
-                                value={value ? value[el?.name] : ''}
+
+                                value={value?.[el?.name] ? value[el?.name] : ''}
                                 name={el?.name}
                                 onChange={onChange}
                                 placeholder={el.placeholder}/>
-                        </>
+                        </div>
                     ))
                 }
                 <button className={styles.submit} onClick={(e) => createTableData(e)}>

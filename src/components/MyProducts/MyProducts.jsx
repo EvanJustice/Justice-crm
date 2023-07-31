@@ -38,36 +38,35 @@ export const MyProducts = ({sellData, setSellData, tableData, setTable, inputsta
         'Creation Date',
         'Price',
         'Remains',
-        'Price',
         'Weight/Volume',
         'Actions',
     ]
     return (
         <>
-            <TableContainer  >
-                <Table  >
+            <TableContainer >
+                <Table >
                     <TableHead >
-                        <TableRow  className={styles.head} >
+                        <TableRow  className={styles.head} align="center">
                             {tableName?.map((name) => (
-                                <TableCell sx={{color: 'white'}}>{name}</TableCell>
+                                <TableCell key={name} sx={{color: 'white'}}>{name}</TableCell>
                             ))}
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableRow sx={{height: '24px'}}/>
+                        <TableRow sx={{height: '24px'}} align="center" />
                         {
                             tableData.map((el, index) => (
-                                <TableRow key={index} className={styles.row} >
+                                <TableRow key={index} className={styles.row} align="center">
                                     <TableCell align={'center'}>{el.productName}</TableCell>
                                     <TableCell align={'center'}>{el.store}</TableCell>
-                                    <TableCell align={'center'}>{el.address}</TableCell>
+                                    <TableCell >{el.address}</TableCell>
                                     <TableCell align={'center'}>{el.category}</TableCell>
                                     <TableCell align={'center'}>{el.creationDate}</TableCell>
                                     <TableCell align={'center'}>{'$' + el.price}</TableCell>
                                     <TableCell align={'center'}>{el.remains}</TableCell>
                                     <TableCell align={'center'}>{el.weight + 'kg'}</TableCell>
-                                    <TableCell>
-                                        <div className={styles.threebuttons}>
+                                    <TableCell align={'center'}>
+                                        <div className={styles.threebuttons} >
                                                 <div className={styles.sell}
                                                      onClick={() => showSellForm(el)}>
                                                     Sell

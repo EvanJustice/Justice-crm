@@ -1,7 +1,11 @@
+// import styles from 'MainPage.module.css'
+
 export const MainPage = () =>{
     return (
-        <>
-            <p style={{fontSize: '70px'}}>MAINPAGE CONTeNt</p>
-        </>
+        <div >
+            {/*<div className={styles.box1}>box1</div>*/}
+            {/*<div className={styles.box2}>box2</div>*/}
+            {/*<div className={styles.box3}>box3</div>*/}
+        </div>
     )
 }
