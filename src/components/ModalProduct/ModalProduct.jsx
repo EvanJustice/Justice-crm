@@ -7,7 +7,27 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
 
     const[value, setValue] = useState(null);
     const [error, setError] = useState('')
+    const dateCorrector = (a) => {
+        if(a<10){
+            return '0' + a
+        } else {
+            return a
+        }
+    }
 
+    const productDate = (t = new Date()) => {
+        const y = t.getFullYear();
+        const m = dateCorrector(t.getMonth() + 1);
+        const d = dateCorrector(t.getDate())
+        return `${d}.${m}.${y}`
+    }
+    const clickOutside = (e) => {
+        if(e.target === e.currentTarget){
+            setModal(!modal)
+            setValue(null);
+        }
+        // else {console.log(productDate())}
+    }
     const clickXMark = () => {
         setModal(!modal)
         setValue(null);
@@ -37,8 +57,8 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
                     {
                         ...value,
                         key: (new Date).getTime(),
-                        address: 'Krylatskaya str.',
-                        creationDate: '05.07.2021'
+                        address: 'Krylatskaya street',
+                        creationDate: productDate()
                     },
                     ...tableData]
                 );
@@ -52,11 +72,7 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
          setValue({...value, [e.target.name]: e.target.value} );
     }
 
-    const clickOutside = (e) => {
-        if(e.target === e.currentTarget){
-            setModal(!modal)
-            setValue(null);
-        }}
+
     const number = 'number';
     const text = 'text'
     return (

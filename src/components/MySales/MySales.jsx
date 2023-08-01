@@ -25,8 +25,8 @@ const cells = [
                     <TableHead >
                         <TableRow className={styles.head} >
                             {
-                                cells.map((name) => (
-                                    <TableCell sx={{color: 'white'}}>{name}</TableCell>
+                                cells.map((name, index) => (
+                                    <TableCell key={index} sx={{color: 'white'}}>{name}</TableCell>
                                     )
                                 )
                             }

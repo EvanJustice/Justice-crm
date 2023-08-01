@@ -59,7 +59,7 @@ export const MyProducts = ({sellData, setSellData, tableData, setTable, inputsta
                                 <TableRow key={index} className={styles.row} align="center">
                                     <TableCell align={'center'}>{el.productName}</TableCell>
                                     <TableCell align={'center'}>{el.store}</TableCell>
-                                    <TableCell >{el.address}</TableCell>
+                                    <TableCell className={styles.test} >{el.address}</TableCell>
                                     <TableCell align={'center'}>{el.category}</TableCell>
                                     <TableCell align={'center'}>{el.creationDate}</TableCell>
                                     <TableCell align={'center'}>{'$' + el.price}</TableCell>

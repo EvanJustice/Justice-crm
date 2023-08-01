@@ -32,3 +32,9 @@
 .row:nth-child(odd){
     background-color: #F8F8F8;
 }
+.test{
+    width: 50px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
