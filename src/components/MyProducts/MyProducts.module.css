@@ -1,0 +1,40 @@
+.head{
+    height: 54px;
+    background: #2B3844;
+    border-radius: 3px;
+}
+.sell{
+    width: 53px;
+    height: 28px;
+    border-radius: 3px;
+    background-color: rgba(83, 130, 231, 0.1 );
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #5382E7;
+    cursor: pointer;
+}
+.threebuttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+.delete{
+    margin-left: 6px;
+}
+
+.row:nth-child(even){
+    background-color: white;
+    border: 1px solid #F8F8F8;
+}
+.row:nth-child(odd){
+    background-color: #F8F8F8;
+}
+.test{
+    width: 50px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
