@@ -41,34 +41,21 @@ export const companyValidation = (values, setErrors) => {
     }
 }
 
-export const emailValidation = (values, setErrors) => {
+export const emailValidation = (values, errors, setErrors) => {
     const reg = /^[a-z0-9](\.?[a-z0-9]){2,}@g(oogle)?mail\.com$/
-    if(!values.email.match(reg)){
-        setErrors((prevState) => ({
-            ...prevState,
-            email: "Invalid Email!",
-        }));
+    if(!values.email.match(reg) || values.email !== ''){
+        setErrors((prevState) => ({...prevState, email: "Invalid Email!"}));
     } else {
-        setErrors((prevState) => ({
-            ...prevState,
-            email: '',
-        }));
+        setErrors((prevState) => ({...prevState, email: ""}));
     }
 };
 
-export const passwordValidation = (values, setErrors) => {
+export const passwordValidation = (values, errors, setErrors) => {
     const reg = /^(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+=]).*$/
     if(!values.password.match(reg)){
-        setErrors((prevState) => ({
-            ...prevState,
-            password: 'Should be min 6 characters (1-lowercase, 1-Uppercase, 1-number, 1-spec symbol)!',
-        }));
+        setErrors((prevState) => ({...prevState, password: 'Should be min 6 characters (1-lowercase, 1-Uppercase, 1-number, 1-spec symbol)!'}));
     } else {
-        setErrors((prevState) => ({
-            ...prevState,
-            password: '',
-        }));
-        return true;
+        setErrors((prevState) => ({...prevState, password: ""}));
     }
 }
 
@@ -135,17 +122,15 @@ export const inputs = [
 
 export const inputes = [
     {
-        id: 7,
+        id: "7",
         name: 'email',
         type: 'text',
-        placeholder: 'Email',
         label: 'Email',
     },
     {
-        id: 8,
+        id: "8",
         name: 'password',
         type: 'password',
-        placeholder: 'Enter password',
         label: 'Password',
     }
 ];

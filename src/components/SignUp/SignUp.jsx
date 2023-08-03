@@ -1,7 +1,14 @@
 import styles from './Signup.module.css'
 import {FormInput} from "../FormInput";
 import {useState} from "react";
-import {emailValidation, passwordValidation, nameValidation, lNameValidation, companyValidation, passwordCheck, nameInputs, inputs} from "../../Validation functions/vFunc.js";
+import {emailValidation,
+    passwordValidation,
+    nameValidation,
+    lNameValidation,
+    companyValidation,
+    passwordCheck,
+    nameInputs,
+    inputs} from "../../Validation functions/vFunc.js";
 import {Link} from "react-router-dom";
 
 export const SignUp = () => {

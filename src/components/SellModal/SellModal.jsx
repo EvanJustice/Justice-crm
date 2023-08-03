@@ -1,12 +1,15 @@
 import styles from './SellModal.module.css'
 import {useEffect, useState} from "react";
+import {TextField} from "@mui/material";
 
 export const SellModal = ({dataEdit, sellValue, setSellValue, show, setShow, setTableData, tableData, setSellData, sellData}) => {
 
     const [remainsFocus, setRemainsFocus] = useState(false);
-    const [remainsErrors, setRemainsErrors] = useState("");
     const [lastSaleFocus, setLastSaleFocus] = useState(false);
-    const [lastSaleErrors, setLastSaleErrors] = useState("");
+    const [zeroValue1, setZeroValue1] = useState('')
+    const [zeroValue2, setZeroValue2] = useState('')
+    const [errorRemains, setErrorRemains] = useState('')
+    const [errorLastSale, setErrorLastSale] = useState('')
 
     const blurHandler = (e) => {
         switch (e.target.name) {
@@ -14,7 +17,6 @@ export const SellModal = ({dataEdit, sellValue, setSellValue, show, setShow, set
                 setRemainsFocus(true)
                 break
             case 'lastSale':
-                e.target.type = "text"
                 setLastSaleFocus(true)
                 break
         }
@@ -22,128 +24,162 @@ export const SellModal = ({dataEdit, sellValue, setSellValue, show, setShow, set
 
     const clickXMark = () => {
         setSellValue(null)
+        setZeroValue1("")
+        setZeroValue2("")
+        setErrorRemains("")
+        setErrorLastSale("")
         setShow(!show)
     }
-    const updateState = () => {
-        const tableFix = tableData?.map(item => {
-                if (item?.key === dataEdit?.key) {
-                return {
-                    ...dataEdit,
-                    remains: `${+dataEdit?.remains - sellValue?.remains}`,
-                    lastSale: fixDataValue(sellValue?.lastSale)}
-                }
-            return item;
-        });
-        const zeroFilter = tableFix.filter((e)=> (+e.remains > 0))
-        const hasSellItem = sellData?.filter((el) => el?.key === dataEdit?.key);
-        const tableSellFix = sellData?.map(item => {
-            if (item?.key === dataEdit?.key) {
-                return {
-                    ...dataEdit,
-                    remains: Number(item?.remains) + Number(sellValue?.remains),
-                    lastSale: fixDataValue(sellValue?.lastSale)}
-            }
-            return item;
-        });
-        setTableData(zeroFilter.length ? tableFix : zeroFilter);
-        setSellData(hasSellItem?.length > 0
-            ? tableSellFix
-            : [{
-                ...dataEdit,
-                remains: `${sellValue.remains}`,
-                lastSale: fixDataValue(sellValue?.lastSale)
-              },
-                ...sellData
-            ])}
-
-    const sellProduct = (e) => {
-        e.preventDefault();
-        dataLenght();
-        remLenght();
-        if(!remainsErrors && !lastSaleErrors && dataLenght() && remLenght()){
-            updateState();
-            setShow(!show);
-            setSellValue(null)
-        }
-    }
-    const dataLenght = () => {
-        Boolean(!sellValue?.lastSale) ? setLastSaleErrors('дату!!!') : setLastSaleErrors('')
-    }
-    const remLenght = () => {
-        Boolean(!sellValue?.remains) ? setRemainsErrors('товар!!!') : setRemainsErrors('')
-    }
-    const onChangeRemains = (e) => {
-        setSellValue({...sellValue, [e.target.name]: e.target.value});
-        if(e.target.name === 'remains' && +e.target.value > +dataEdit.remains){
-            setRemainsErrors('У вас нет столько вещей')
-        } else {
-            setRemainsErrors('')
-        }
-    }
-    const onChangeLastSale = (e) => {
-        setSellValue({...sellValue, [e.target.name]: e.target.value});
-        dateValidation(dateIntegrator(dataEdit.creationDate),
-            dateIntegrator(fixDataValue(sellValue.lastSale)))
-        }
     const fixDataValue = (d) => {
         const year = d?.slice(0,4)
         const month = d?.slice(5,7)
         const day = d?.slice(8,10)
         return `${day}.${month}.${year}`
     }
-    const dateIntegrator = (d) => {
-        const y = +d?.slice(6)
-        const m = +d?.slice(3,5) * 0.1
-        const day = +d?.slice(0,2) * 0.001
-        return y + m + day
+
+    const sellProduct = (e) => {
+        const updateState = () => {
+            const tableFix = tableData?.map(item => {
+                if (item?.key === dataEdit?.key) {
+                    return {
+                        ...dataEdit,
+                        remains: `${+dataEdit?.remains - sellValue?.remains}`,
+                        lastSale: fixDataValue(sellValue?.lastSale)}
+                }
+                return item;
+            });
+            const zeroFilter = tableFix.filter((e)=> (+e.remains > 0))
+            const hasSellItem = sellData?.filter((el) => el?.key === dataEdit?.key);
+            const tableSellFix = sellData?.map(item => {
+                if (item?.key === dataEdit?.key) {
+                    return {
+                        ...dataEdit,
+                        remains: Number(item?.remains) + Number(sellValue?.remains),
+                        lastSale: fixDataValue(sellValue?.lastSale)}
+                }
+                return item;
+            });
+            setTableData(zeroFilter.length ? tableFix : zeroFilter);
+            setSellData(hasSellItem?.length > 0
+                ? tableSellFix
+                : [{
+                    ...dataEdit,
+                    remains: `${sellValue.remains}`,
+                    lastSale: fixDataValue(sellValue?.lastSale)
+                },
+                    ...sellData
+                ])}
+        e.preventDefault();
+        if(!sellValue?.hasOwnProperty('remains')){
+            setZeroValue1('введите количество товаров')
+        }
+        if(!sellValue?.hasOwnProperty('lastSale')){
+            setZeroValue2('введите дату')
+        }
+        if(!zeroValue1 &&
+            !zeroValue2 &&
+            !errorRemains &&
+            !errorLastSale &&
+            sellValue &&
+            sellValue.hasOwnProperty('remains') &&
+            sellValue.hasOwnProperty('lastSale')
+        ){
+            updateState();
+            setSellValue(null)
+            setZeroValue1("")
+            setZeroValue2("")
+            setErrorRemains("")
+            setErrorLastSale("")
+            setShow(!show);}
     }
-    const dateValidation = (createDate, saleDate) =>{
-        if(saleDate > createDate || saleDate === createDate){
-            setLastSaleErrors('')
-            return true
+
+    const onChangeRemains = (e) => {
+        setSellValue({...sellValue, [e.target.name]: e.target.value});
+        if(!e.target.value || e.target.value.length < 1){
+            setZeroValue1('введите количество товара')
         } else {
-            setLastSaleErrors('Вы не можете продать товар раньше его создания')
-            return false
+            setZeroValue1('')
+        }
+        if(+e.target.value > +dataEdit.remains){
+            setErrorRemains('у вас нет столько товаров')
+        } else {
+            setErrorRemains('')
+        }
+    }
+    useEffect(() => {
+        dateValidation(dataEdit?.creationDate, sellValue?.lastSale);
+    },[sellValue?.lastSale, dataEdit?.creationDate])
+    const dateValidation = (createDate, saleDate) =>{
+        const dateIntegrator = (d) => {
+            const y = +d?.slice(6)
+            const m = +d?.slice(3,5) * 0.1
+            const day = +d?.slice(0,2) * 0.001
+            return y + m + day
+        }
+        if(dateIntegrator(fixDataValue(saleDate)) > dateIntegrator(createDate)
+            || dateIntegrator(fixDataValue(saleDate)) === dateIntegrator(createDate)){
+            setErrorLastSale('')
+        } else {
+            setErrorLastSale('Вы не можете продать товар раньше его создания');
+            if(!dateIntegrator(fixDataValue(saleDate))){
+                setErrorLastSale("")
+            }
+        }
+    }
+    const onChangeLastSale = (e) => {
+        setSellValue({...sellValue, [e.target.name]: e.target.value});
+        if(!e.target.value){
+            setZeroValue2('введите дату')
+        } else {
+            setZeroValue2('')
         }
     }
     const clickOutside = (e) => {
         if(e.target === e.currentTarget){
-            setShow(!show)
             setSellValue(null)
-        } else {
-            console.log(Boolean(sellValue?.lastSale))}
+            setZeroValue1("")
+            setZeroValue2("")
+            setErrorRemains("")
+            setErrorLastSale("")
+            setShow(!show)
+        }
     }
     return (
         <div onClick={clickOutside} className={show ? styles.containerWrapper : styles.container}>
             <form id='123' className={styles.content}>
                 <a onClick={clickXMark} className={styles.close}></a>
                 <h1 className={styles.h1}>Sell the product</h1>
-                {
-                    (remainsErrors && remainsFocus) &&
-                    <span style={{color: "red"}}>{remainsErrors}</span>
-                }
-                        <input
-                            className={styles.input}
-                            type="number"
-                            name='remains'
-                            placeholder='Number of products'
-                            value={sellValue && sellValue?.remains ? sellValue?.remains : ''}
-                            onChange={(e) => onChangeRemains(e)}
-                            onBlur={blurHandler}
-                        />
-                {
-                    <span style={{color: "red"}}>{lastSaleErrors}</span>
-                }
-                        <input
-                                    className={styles.input}
-                                    type="text"
-                                    name="lastSale"
-                                    value={sellValue &&  sellValue?.lastSale ? sellValue?.lastSale : ''}
-                                    placeholder='Date of sale'
-                                    onChange={(e)=> onChangeLastSale(e)}
-                                    onBlur={(e) => blurHandler(e)}
-                                    onFocus={(e) => (e.target.type = "date")}
-                        />
+                <div className={styles.text_field}>
+                    <TextField
+                        className={styles.input}
+                        type="number"
+                        error={zeroValue1 || errorRemains}
+                        helperText={zeroValue1 || errorRemains}
+                        variant='outlined'
+                        name='remains'
+                        label='Number of products'
+                        margin='normal'
+                        value={sellValue && sellValue?.remains ? sellValue?.remains : ''}
+                        onChange={(e) => onChangeRemains(e)}
+                        onBlur={blurHandler}
+                    />
+                </div>
+                <div className={styles.text_field}>
+                    <TextField
+                        className={styles.input}
+                        type={lastSaleFocus ? 'date' : 'text'}
+                        error={zeroValue2 || errorLastSale}
+                        helperText={zeroValue2 || errorLastSale}
+                        variant='outlined'
+                        name="lastSale"
+                        margin='normal'
+                        value={sellValue &&  sellValue?.lastSale ? sellValue?.lastSale : ''}
+                        label='Date of sale'
+                        onFocus={(e)=>blurHandler(e)}
+                        onChange={(e)=> onChangeLastSale(e)}
+                        onBlur={() => setLastSaleFocus(false)}
+                    />
+                </div>
                 <div className={styles.submit} onClick={(e) => sellProduct(e)}>
                     Sell product
                 </div>

@@ -56,7 +56,6 @@ export const Layout = ({tableData, setTableData, modal, setModal, data}) => {
             case '/sales':
                 return{title:'My sales',
                     subtitle: 'Sales table'}
-
         }
     }
 
@@ -120,7 +119,8 @@ export const Layout = ({tableData, setTableData, modal, setModal, data}) => {
                     setModal={setModal}
                     data={data}
                 />
-                <Outlet />
+                { <Outlet />}
+
             </div>
         </div>
     )

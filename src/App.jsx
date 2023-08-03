@@ -5,7 +5,7 @@ import {MySales} from "./components/MySales/MySales.jsx";
 import {Cabinet} from "./components/Cabinet/Cabinet.jsx";
 import {MyProducts} from "./components/MyProducts/MyProducts.jsx";
 import {MainPage} from "./components/MainPage/MainPage.jsx";
-import { Routes, Route} from "react-router-dom";
+import {Routes, Route, useLocation} from "react-router-dom";
 import {ModalProduct} from "./components/ModalProduct/ModalProduct.jsx";
 import {useState} from "react";
 
@@ -22,8 +22,10 @@ export const App = () => {
     const[inputState, setInputState] = useState(inputData)
     const [showModal, setShowModal] = useState(false);
     const [tableData, setTableData] = useState([]);
-    const [sellValue, setSellValue] = useState([]);
+    const [sellValue, setSellValue] = useState(null);
     const [sellData, setSellData] = useState([])
+
+    const location = useLocation()
 
     return (
         <>
@@ -34,9 +36,9 @@ export const App = () => {
                     <Route path="/cabinet" element={<Cabinet />} />
                     <Route path="/sales" element={<MySales setSellData={setSellData} sellData={sellData} sellValue={sellValue} setSellValue={setSellValue} tableData={tableData} setTableData={setTableData}/>} />
                     <Route path="/products" element={<MyProducts sellData={sellData} setSellData={setSellData} sellValue={sellValue} setSellValue={setSellValue} tableData={tableData} setTable={setTableData} inputstate={inputState}/>} />
-                    <Route path="/register" element={<SignUp />} />
-                    <Route path="/login" element={<SignIn />} />
                 </Route>
+                <Route path="/register" element={<SignUp />} />
+                <Route path="/login" element={<SignIn />} />
             </Routes>
         </>
     )

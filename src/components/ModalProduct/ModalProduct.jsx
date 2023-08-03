@@ -1,12 +1,16 @@
 import styles from './ModalProduct.module.css'
 import {ReactComponent as Plus} from "../../assets/Plus.svg";
-import { useState } from "react";
+import {useEffect, useState} from "react";
+import {TextField} from "@mui/material";
+
 
 // eslint-disable-next-line react/prop-types
 export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) => {
 
-    const[value, setValue] = useState(null);
-    const [error, setError] = useState('')
+    const [value, setValue] = useState('');
+    const [error, setError] = useState({})
+    const [focus, setFocus] = useState(false)
+
     const dateCorrector = (a) => {
         if(a<10){
             return '0' + a
@@ -26,7 +30,6 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
             setModal(!modal)
             setValue(null);
         }
-        // else {console.log(productDate())}
     }
     const clickXMark = () => {
         setModal(!modal)
@@ -42,6 +45,8 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
             })
             const finalErrors = Object.assign({}, ...errorMessage );
             setError(finalErrors);
+            setFocus(true)
+            console.log("IF ERR", error)
         } else {
             const filtered = data?.filter((el) => !value[`${el?.name}`]);
             const errorMessage = filtered.map(item => {
@@ -51,7 +56,8 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
             })
             const finalErrors = Object.assign({}, ...errorMessage );
             setError(finalErrors);
-
+            setFocus(true)
+            console.log("ELSE ERR", error)
             if (Object.keys(finalErrors).length === 0) {
                 setTableData([
                     {
@@ -62,6 +68,7 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
                     },
                     ...tableData]
                 );
+                setFocus(false)
                 setModal(!modal)
                 setValue(null);
             }
@@ -69,9 +76,8 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
     }
 
      const onChange = (e) => {
-         setValue({...value, [e.target.name]: e.target.value} );
+         setValue({...value, [e.target.name]: e.target.value});
     }
-
 
     const number = 'number';
     const text = 'text'
@@ -83,26 +89,28 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
                 {
                     // eslint-disable-next-line react/prop-types
                     data.map((el) => (
-                        <div key={el.key}>
-                            <span style={{color: 'red'}}>{error[el?.name]}</span>
-                            <input
+                        <div key={el.key} className={styles.inputDiv} >
+                            <TextField
+                                error={focus && !value?.[el?.name]}
+                                helperText={focus && !value?.[el?.name] ? 'заполните это поле' : ''}
                                 className={styles.input}
+                                variant='outlined'
+                                margin='normal'
                                 type={el?.name === 'price' ?
                                     number : el?.name === 'remains' ?
                                         number : el?.name ==='weight' ?
                                             number : text }
-
                                 value={value?.[el?.name] ? value[el?.name] : ''}
                                 name={el?.name}
-                                onChange={onChange}
-                                placeholder={el.placeholder}/>
+                                onBlur={() => setFocus(true)}
+                                onChange={(e) => onChange(e)}
+                                label={el.placeholder}/>
                         </div>
                     ))
                 }
                 <button className={styles.submit} onClick={(e) => createTableData(e)}>
                     Add Product<Plus style={{marginLeft: '16px'}} />
                 </button>
-                <span></span>
             </form>
         </div>
     )
