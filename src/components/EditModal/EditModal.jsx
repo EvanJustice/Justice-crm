@@ -1,20 +1,21 @@
 import styles from './EditModal.module.css'
 import {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {actions} from "../../app/tableDataSlice.js";
 
-export const EditModal = ({dataEdit, show, setshow, input, tableData, setTableData}) => {
+
+export const EditModal = ({ show, setshow, input}) => {
+    const dataEdit = useSelector((state) => state.dataEdit);
+    const dispatch = useDispatch();
+
 
     const[value, setValue] = useState(null);
+    console.log(value)
     const clickXMark = () => {
         setshow(!show)
     }
     const updateState = () => {
-        const newState = tableData.map(item => {
-            if (item.key === dataEdit.key) {
-                return {...value}
-            }
-            return item;
-        });
-        setTableData(newState);
+        dispatch(actions.editRow(value))
     };
     const savingChanges = (e) => {
         e.preventDefault();
@@ -47,7 +48,7 @@ export const EditModal = ({dataEdit, show, setshow, input, tableData, setTableDa
                             key={index}
                             type="text"
                             name={el?.name}
-                            onChange={onChange}
+                            onChange={(e) => onChange(e)}
                             defaultValue={dataEdit ? dataEdit[el?.name] : ''}
                             placeholder={el.name}
                         />

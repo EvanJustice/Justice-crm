@@ -2,9 +2,7 @@ import styles from './FormInput.module.css'
 
 
 export const FormInput = (props) => {
-
     const { label, errors, name, onChange, id, ...inputProps} = props;
-    console.log(props);
 
     return(
         <div className={styles.container} key={id}>

@@ -1,35 +1,32 @@
 import styles from './ModalProduct.module.css'
 import {ReactComponent as Plus} from "../../assets/Plus.svg";
 import { useState } from "react";
+import {TextField} from "@mui/material";
+import { useDispatch } from "react-redux";
+import {actions} from "../../app/tableDataSlice.js";
+
+
 
 // eslint-disable-next-line react/prop-types
-export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) => {
+export const ModalProduct = ({modal, setModal, data}) => {
 
-    const[value, setValue] = useState(null);
-    const [error, setError] = useState('')
-    const dateCorrector = (a) => {
-        if(a<10){
-            return '0' + a
-        } else {
-            return a
-        }
-    }
+    const dispatch = useDispatch()
 
-    const productDate = (t = new Date()) => {
-        const y = t.getFullYear();
-        const m = dateCorrector(t.getMonth() + 1);
-        const d = dateCorrector(t.getDate())
-        return `${d}.${m}.${y}`
-    }
+    const [value, setValue] = useState({});
+    const [error, setError] = useState({})
+    const [focus, setFocus] = useState(false)
+
+
     const clickOutside = (e) => {
         if(e.target === e.currentTarget){
+            setFocus(false)
             setModal(!modal)
             setValue(null);
         }
-        // else {console.log(productDate())}
     }
     const clickXMark = () => {
         setModal(!modal)
+        setFocus(false)
         setValue(null);
     }
     const createTableData = (e) => {
@@ -42,6 +39,8 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
             })
             const finalErrors = Object.assign({}, ...errorMessage );
             setError(finalErrors);
+
+            console.log("IF ERR", error)
         } else {
             const filtered = data?.filter((el) => !value[`${el?.name}`]);
             const errorMessage = filtered.map(item => {
@@ -51,27 +50,19 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
             })
             const finalErrors = Object.assign({}, ...errorMessage );
             setError(finalErrors);
-
             if (Object.keys(finalErrors).length === 0) {
-                setTableData([
-                    {
-                        ...value,
-                        key: (new Date).getTime(),
-                        address: 'Krylatskaya street',
-                        creationDate: productDate()
-                    },
-                    ...tableData]
-                );
-                setModal(!modal)
+                console.log('setrow setrow setrow')
+                dispatch(actions.addRow(value));
+                setFocus(false);
+                setModal(!modal);
                 setValue(null);
             }
         }
     }
 
      const onChange = (e) => {
-         setValue({...value, [e.target.name]: e.target.value} );
+         setValue({...value, [e.target.name]: e.target.value});
     }
-
 
     const number = 'number';
     const text = 'text'
@@ -83,26 +74,29 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
                 {
                     // eslint-disable-next-line react/prop-types
                     data.map((el) => (
-                        <div key={el.key}>
-                            <span style={{color: 'red'}}>{error[el?.name]}</span>
-                            <input
+                        <div key={el.key} className={styles.inputDiv} >
+                            <TextField
+                                error={focus && (Boolean(!value?.[el?.name]) || (+value?.[el?.name] < 1))}
+                                helperText={focus && !value?.[el?.name] ? 'заполните это поле' : focus && (+value?.[el?.name] < 1) ? 'нельзя так' : '' }
                                 className={styles.input}
+                                variant='outlined'
+                                margin='normal'
                                 type={el?.name === 'price' ?
                                     number : el?.name === 'remains' ?
                                         number : el?.name ==='weight' ?
                                             number : text }
-
                                 value={value?.[el?.name] ? value[el?.name] : ''}
                                 name={el?.name}
-                                onChange={onChange}
-                                placeholder={el.placeholder}/>
+                                onBlur={(e) => e.target.value ?
+                                    setFocus(false) : setFocus(true)}
+                                onChange={(e) => onChange(e)}
+                                label={el.placeholder}/>
                         </div>
                     ))
                 }
                 <button className={styles.submit} onClick={(e) => createTableData(e)}>
                     Add Product<Plus style={{marginLeft: '16px'}} />
                 </button>
-                <span></span>
             </form>
         </div>
     )

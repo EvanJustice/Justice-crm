@@ -55,7 +55,7 @@
 .h1{
     font-size: 28px;
     font-weight: 700;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
 .input {
@@ -73,9 +73,17 @@
     align-items: center;
     width: 300px;
     height: 52px;
+    margin-top: 20px;
     border-radius: 3px;
     background: #5382E7;
     color: white;
     cursor: pointer;
 }
+.error{
+    display: block;
+}
+.inputDiv {
+    margin-bottom: 10px;
+}
+
 
