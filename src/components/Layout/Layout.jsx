@@ -37,11 +37,12 @@ const linksArray = [
         link: '/cabinet'
     }]
 // eslint-disable-next-line react/prop-types
-export const Layout = ({tableData, setTableData, modal, setModal, data}) => {
-    const [active, setActive] = useState(null)
+export const Layout = ({ setAuth, modal, setModal, data}) => {
+    const history = useLocation();
+    const [active, setActive] = useState(history.pathname)
     const[errors, setErrors] = useState("")
     const navigate = useNavigate();
-    const history = useLocation();
+    console.log(history.pathname)
     const titles = (linkName) => {
         switch (linkName) {
             case '/':
@@ -58,9 +59,12 @@ export const Layout = ({tableData, setTableData, modal, setModal, data}) => {
                     subtitle: 'Sales table'}
         }
     }
-
-    const onClick = (id) =>{
-        setActive(id);
+    const logout = () => {
+        localStorage.removeItem("currentUser")
+        setAuth(false)
+    }
+    const onClick = (link) =>{
+        setActive(link);
     };
     const click = () => {
         setModal(!modal)
@@ -77,12 +81,12 @@ export const Layout = ({tableData, setTableData, modal, setModal, data}) => {
                                 <div
                                     key={el?.id}
                                     className={
-                                        active === el?.id
+                                        active === el?.link
                                             ? styles.link_
                                             : styles.link
                                     }
                                     onClick={() => {
-                                        onClick(el?.id)
+                                        onClick(el?.link)
                                         navigate(el?.link)
                                     }}
                                 >
@@ -93,7 +97,8 @@ export const Layout = ({tableData, setTableData, modal, setModal, data}) => {
                     </div>
                     <div className={styles.linkBox_}>
                         <hr/>
-                        <div className={styles.link} >
+                        <div className={styles.link}
+                             onClick={() =>  logout()}>
                             <Logout className={styles.svg}/>Log out
                         </div>
                     </div>
@@ -113,8 +118,6 @@ export const Layout = ({tableData, setTableData, modal, setModal, data}) => {
                 <ModalProduct
                     errors={errors}
                     setErrors={setErrors}
-                    tableData={tableData}
-                    setTableData={setTableData}
                     modal={modal}
                     setModal={setModal}
                     data={data}

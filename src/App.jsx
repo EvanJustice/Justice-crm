@@ -5,9 +5,9 @@ import {MySales} from "./components/MySales/MySales.jsx";
 import {Cabinet} from "./components/Cabinet/Cabinet.jsx";
 import {MyProducts} from "./components/MyProducts/MyProducts.jsx";
 import {MainPage} from "./components/MainPage/MainPage.jsx";
-import {Routes, Route, useLocation} from "react-router-dom";
+import {Routes, Route, Navigate} from "react-router-dom";
 import {ModalProduct} from "./components/ModalProduct/ModalProduct.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 const inputData = [
     {key: 1, placeholder: 'Store', value:'', name:'store'},
@@ -21,25 +21,29 @@ const inputData = [
 export const App = () => {
     const[inputState, setInputState] = useState(inputData)
     const [showModal, setShowModal] = useState(false);
-    const [tableData, setTableData] = useState([]);
     const [sellValue, setSellValue] = useState(null);
-    const [sellData, setSellData] = useState([])
+    const [auth, setAuth] = useState(false)
+    useEffect(() => {
+        localStorage.setItem('auth', JSON.stringify(auth))
+    },[auth])
 
-    const location = useLocation()
-
-    return (
+    return !auth ?
         <>
             <Routes>
-                <Route path='/' element={<Layout tableData={tableData} setTableData={setTableData} modal={showModal} setModal={setShowModal} data={inputState} setData={setInputState} />}>
+                <Route path="/login" element={<SignIn auth={auth} setAuth={setAuth} />} />
+                <Route path="/register" element={<SignUp auth={auth} setAuth={setAuth} />} />
+                <Route path="*" element={<Navigate to='/register' replace />} />
+            </Routes>
+        </> : <>
+            <Routes>
+                <Route path='/' element={<Layout setAuth={setAuth}  modal={showModal} setModal={setShowModal} data={inputState} setData={setInputState} />}>
                     <Route index element={<MainPage />} />
                     <Route path="/create" element={<ModalProduct />} />
                     <Route path="/cabinet" element={<Cabinet />} />
-                    <Route path="/sales" element={<MySales setSellData={setSellData} sellData={sellData} sellValue={sellValue} setSellValue={setSellValue} tableData={tableData} setTableData={setTableData}/>} />
-                    <Route path="/products" element={<MyProducts sellData={sellData} setSellData={setSellData} sellValue={sellValue} setSellValue={setSellValue} tableData={tableData} setTable={setTableData} inputstate={inputState}/>} />
+                    <Route path="/sales" element={<MySales sellValue={sellValue} setSellValue={setSellValue} />} />
+                    <Route path="/products" element={<MyProducts  sellValue={sellValue} setSellValue={setSellValue} inputstate={inputState}/>} />
+                    <Route path="*" element={<Navigate to='/' replace />} />
                 </Route>
-                <Route path="/register" element={<SignUp />} />
-                <Route path="/login" element={<SignIn />} />
             </Routes>
         </>
-    )
 }

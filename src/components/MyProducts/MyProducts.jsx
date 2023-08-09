@@ -10,26 +10,26 @@ import {ReactComponent as Delete} from "../../assets/Delete.svg";
 import {EditModal} from "../EditModal/EditModal.jsx";
 import {useState} from "react";
 import {SellModal} from "../SellModal/SellModal.jsx";
+import { useSelector, useDispatch} from "react-redux";
+import {actions} from "../../app/tableDataSlice.js";
 
-export const MyProducts = ({sellData, setSellData, tableData, setTable, inputstate, sellValue, setSellValue}) =>{
-    const [showModal, setShowModal] = useState(false)
-    const [showSellModal, setShowSellModal] = useState(false)
-    const [dataEdit, setDataEdit] = useState(null)
+
+
+export const MyProducts = ({inputstate, sellValue, setSellValue}) =>{
+    const [showModal, setShowModal] = useState(false);
+    const [showSellModal, setShowSellModal] = useState(false);
+    const tableData = useSelector((state) => state.tableData)
+    const dispatch = useDispatch()
+
     const showEditForm = (item) => {
-        setDataEdit(item);
-        setShowModal(!showModal)
+        dispatch(actions.takeTableData(item));
+        setShowModal(!showModal);
     }
     const showSellForm = (item) => {
-        setDataEdit(item);
+        dispatch(actions.takeTableData(item));
         setShowSellModal(!showSellModal)
     }
 
-    const deleteRow = (key) => {
-        let row = [...tableData].filter((el) => (
-            el.key !== key
-        ))
-        setTable(row)
-    }
     const tableName = [
         'Product Name',
         'Store',
@@ -55,7 +55,7 @@ export const MyProducts = ({sellData, setSellData, tableData, setTable, inputsta
                     <TableBody>
                         <TableRow sx={{height: '24px'}} align="center" />
                         {
-                            tableData.map((el, index) => (
+                            tableData?.map((el, index) => (
                                 <TableRow key={index} className={styles.row} align="center">
                                     <TableCell align={'center'}>{el.productName}</TableCell>
                                     <TableCell align={'center'}>{el.store}</TableCell>
@@ -68,11 +68,11 @@ export const MyProducts = ({sellData, setSellData, tableData, setTable, inputsta
                                     <TableCell align={'center'}>
                                         <div className={styles.threebuttons} >
                                                 <div className={styles.sell}
-                                                     onClick={() => showSellForm(el)}>
+                                                     onClick={(e) => showSellForm(el)}>
                                                     Sell
                                                 </div>
                                                 <Edit onClick={() => showEditForm(el)}/>
-                                                <div onClick={() =>deleteRow(el.key)} className={styles.delete}>
+                                                <div onClick={() => dispatch(actions.deleteRow(el.key))} className={styles.delete}>
                                                     <Delete/>
                                                 </div>
                                         </div>
@@ -84,24 +84,15 @@ export const MyProducts = ({sellData, setSellData, tableData, setTable, inputsta
                 </Table>
             </TableContainer>
             <EditModal
-                dataEdit={dataEdit}
                 show={showModal}
                 setshow={setShowModal}
                 input={inputstate}
-                tableData={tableData}
-                setTableData={setTable}
             />
             <SellModal
-                setSellData={setSellData}
-                sellData={sellData}
                 sellValue={sellValue}
                 setSellValue={setSellValue}
-                dataEdit={dataEdit}
-                setData={setDataEdit}
                 show={showSellModal}
                 setShow={setShowSellModal}
-                tableData={tableData}
-                setTableData={setTable}
             />
         </>
     )

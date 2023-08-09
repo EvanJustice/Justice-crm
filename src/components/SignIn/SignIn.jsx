@@ -5,7 +5,7 @@ import {emailValidation, passwordValidation, inputes} from "../../Validation fun
 import {Link} from "react-router-dom";
 import {TextField} from "@mui/material";
 
-export const SignIn = () => {
+export const SignIn = ({setAuth}) => {
     const [values, setValues] = useState({
         email:"",
         password:"",
@@ -14,7 +14,7 @@ export const SignIn = () => {
         email:"",
         password:"",
     });
-    const [focus, setFocus] = useState(false)
+
     const onChange = (e) =>{
         setValues({...values, [e.target.name]: e.target.value} );
         setErrors({
@@ -22,11 +22,26 @@ export const SignIn = () => {
             [e.target.name]: '',
         })
     };
+    let a = ''
     const handleSubmit = (e) => {
         e.preventDefault();
         emailValidation(values, errors, setErrors);
         passwordValidation(values, errors, setErrors);
-    }
+        if (emailValidation(values, errors, setErrors) && passwordValidation(values, errors, setErrors)) {
+            const usersFromStorage = JSON.parse(localStorage.getItem('users'))
+            const filterUsers = usersFromStorage.filter((el) => (
+                el.email === values.email && el.password === values.password
+            ))
+            console.log(66666, filterUsers)
+            if (filterUsers.length > 0){
+                localStorage.setItem('currentUser', JSON.stringify(values))
+                setAuth(true)
+            }
+        }
+            else if(!emailValidation(values, errors, setErrors) || !passwordValidation(values, errors, setErrors)) {
+                 alert('неправильная почта или пароль')
+        }
+        }
     return (
         <div className={styles.content_}>
             <div className={styles.form_flexbox}>

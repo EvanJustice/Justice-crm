@@ -1,38 +1,32 @@
 import styles from './ModalProduct.module.css'
 import {ReactComponent as Plus} from "../../assets/Plus.svg";
-import {useEffect, useState} from "react";
+import { useState } from "react";
 import {TextField} from "@mui/material";
+import { useDispatch } from "react-redux";
+import {actions} from "../../app/tableDataSlice.js";
+
 
 
 // eslint-disable-next-line react/prop-types
-export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) => {
+export const ModalProduct = ({modal, setModal, data}) => {
 
-    const [value, setValue] = useState('');
+    const dispatch = useDispatch()
+
+    const [value, setValue] = useState({});
     const [error, setError] = useState({})
     const [focus, setFocus] = useState(false)
 
-    const dateCorrector = (a) => {
-        if(a<10){
-            return '0' + a
-        } else {
-            return a
-        }
-    }
 
-    const productDate = (t = new Date()) => {
-        const y = t.getFullYear();
-        const m = dateCorrector(t.getMonth() + 1);
-        const d = dateCorrector(t.getDate())
-        return `${d}.${m}.${y}`
-    }
     const clickOutside = (e) => {
         if(e.target === e.currentTarget){
+            setFocus(false)
             setModal(!modal)
             setValue(null);
         }
     }
     const clickXMark = () => {
         setModal(!modal)
+        setFocus(false)
         setValue(null);
     }
     const createTableData = (e) => {
@@ -45,7 +39,7 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
             })
             const finalErrors = Object.assign({}, ...errorMessage );
             setError(finalErrors);
-            setFocus(true)
+
             console.log("IF ERR", error)
         } else {
             const filtered = data?.filter((el) => !value[`${el?.name}`]);
@@ -56,20 +50,11 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
             })
             const finalErrors = Object.assign({}, ...errorMessage );
             setError(finalErrors);
-            setFocus(true)
-            console.log("ELSE ERR", error)
             if (Object.keys(finalErrors).length === 0) {
-                setTableData([
-                    {
-                        ...value,
-                        key: (new Date).getTime(),
-                        address: 'Krylatskaya street',
-                        creationDate: productDate()
-                    },
-                    ...tableData]
-                );
-                setFocus(false)
-                setModal(!modal)
+                console.log('setrow setrow setrow')
+                dispatch(actions.addRow(value));
+                setFocus(false);
+                setModal(!modal);
                 setValue(null);
             }
         }
@@ -91,8 +76,8 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
                     data.map((el) => (
                         <div key={el.key} className={styles.inputDiv} >
                             <TextField
-                                error={focus && !value?.[el?.name]}
-                                helperText={focus && !value?.[el?.name] ? 'заполните это поле' : ''}
+                                error={focus && (Boolean(!value?.[el?.name]) || (+value?.[el?.name] < 1))}
+                                helperText={focus && !value?.[el?.name] ? 'заполните это поле' : focus && (+value?.[el?.name] < 1) ? 'нельзя так' : '' }
                                 className={styles.input}
                                 variant='outlined'
                                 margin='normal'
@@ -102,7 +87,8 @@ export const ModalProduct = ({modal, setModal, data, tableData, setTableData}) =
                                             number : text }
                                 value={value?.[el?.name] ? value[el?.name] : ''}
                                 name={el?.name}
-                                onBlur={() => setFocus(true)}
+                                onBlur={(e) => e.target.value ?
+                                    setFocus(false) : setFocus(true)}
                                 onChange={(e) => onChange(e)}
                                 label={el.placeholder}/>
                         </div>

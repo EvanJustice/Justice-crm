@@ -1,9 +1,12 @@
 import styles from './SellModal.module.css'
 import {useEffect, useState} from "react";
 import {TextField} from "@mui/material";
+import {useDispatch, useSelector} from "react-redux";
+import {actions} from "../../app/tableDataSlice.js";
 
-export const SellModal = ({dataEdit, sellValue, setSellValue, show, setShow, setTableData, tableData, setSellData, sellData}) => {
-
+export const SellModal = ({ sellValue, setSellValue, show, setShow}) => {
+    const dataEdit = useSelector((state) => state.dataEdit)
+    const dispatch = useDispatch();
     const [remainsFocus, setRemainsFocus] = useState(false);
     const [lastSaleFocus, setLastSaleFocus] = useState(false);
     const [zeroValue1, setZeroValue1] = useState('')
@@ -38,37 +41,6 @@ export const SellModal = ({dataEdit, sellValue, setSellValue, show, setShow, set
     }
 
     const sellProduct = (e) => {
-        const updateState = () => {
-            const tableFix = tableData?.map(item => {
-                if (item?.key === dataEdit?.key) {
-                    return {
-                        ...dataEdit,
-                        remains: `${+dataEdit?.remains - sellValue?.remains}`,
-                        lastSale: fixDataValue(sellValue?.lastSale)}
-                }
-                return item;
-            });
-            const zeroFilter = tableFix.filter((e)=> (+e.remains > 0))
-            const hasSellItem = sellData?.filter((el) => el?.key === dataEdit?.key);
-            const tableSellFix = sellData?.map(item => {
-                if (item?.key === dataEdit?.key) {
-                    return {
-                        ...dataEdit,
-                        remains: Number(item?.remains) + Number(sellValue?.remains),
-                        lastSale: fixDataValue(sellValue?.lastSale)}
-                }
-                return item;
-            });
-            setTableData(zeroFilter.length ? tableFix : zeroFilter);
-            setSellData(hasSellItem?.length > 0
-                ? tableSellFix
-                : [{
-                    ...dataEdit,
-                    remains: `${sellValue.remains}`,
-                    lastSale: fixDataValue(sellValue?.lastSale)
-                },
-                    ...sellData
-                ])}
         e.preventDefault();
         if(!sellValue?.hasOwnProperty('remains')){
             setZeroValue1('введите количество товаров')
@@ -84,7 +56,7 @@ export const SellModal = ({dataEdit, sellValue, setSellValue, show, setShow, set
             sellValue.hasOwnProperty('remains') &&
             sellValue.hasOwnProperty('lastSale')
         ){
-            updateState();
+            dispatch(actions.sellProduct(sellValue))
             setSellValue(null)
             setZeroValue1("")
             setZeroValue2("")
@@ -102,6 +74,8 @@ export const SellModal = ({dataEdit, sellValue, setSellValue, show, setShow, set
         }
         if(+e.target.value > +dataEdit.remains){
             setErrorRemains('у вас нет столько товаров')
+        } else if (+e.target.value < 1){
+            setErrorRemains('так нельзя')
         } else {
             setErrorRemains('')
         }
@@ -153,7 +127,7 @@ export const SellModal = ({dataEdit, sellValue, setSellValue, show, setShow, set
                     <TextField
                         className={styles.input}
                         type="number"
-                        error={zeroValue1 || errorRemains}
+                        error={Boolean(zeroValue1) || Boolean(errorRemains)}
                         helperText={zeroValue1 || errorRemains}
                         variant='outlined'
                         name='remains'
@@ -168,7 +142,7 @@ export const SellModal = ({dataEdit, sellValue, setSellValue, show, setShow, set
                     <TextField
                         className={styles.input}
                         type={lastSaleFocus ? 'date' : 'text'}
-                        error={zeroValue2 || errorLastSale}
+                        error={Boolean(zeroValue2) || Boolean(errorLastSale)}
                         helperText={zeroValue2 || errorLastSale}
                         variant='outlined'
                         name="lastSale"

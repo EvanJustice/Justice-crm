@@ -23,6 +23,7 @@
 }
 .delete{
     margin-left: 6px;
+    cursor: pointer;
 }
 
 .row:nth-child(even){
