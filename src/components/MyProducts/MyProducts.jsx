@@ -68,7 +68,7 @@ export const MyProducts = ({inputstate, sellValue, setSellValue}) =>{
                                     <TableCell align={'center'}>
                                         <div className={styles.threebuttons} >
                                                 <div className={styles.sell}
-                                                     onClick={(e) => showSellForm(el)}>
+                                                     onClick={() => showSellForm(el)}>
                                                     Sell
                                                 </div>
                                                 <Edit onClick={() => showEditForm(el)}/>

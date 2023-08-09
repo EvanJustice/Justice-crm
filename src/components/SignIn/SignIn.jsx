@@ -1,6 +1,5 @@
 import styles from './Signin.module.css'
 import {useState} from "react";
-import {FormInput} from "../FormInput/index.js";
 import {emailValidation, passwordValidation, inputes} from "../../Validation functions/vFunc.js";
 import {Link} from "react-router-dom";
 import {TextField} from "@mui/material";
@@ -22,7 +21,6 @@ export const SignIn = ({setAuth}) => {
             [e.target.name]: '',
         })
     };
-    let a = ''
     const handleSubmit = (e) => {
         e.preventDefault();
         emailValidation(values, errors, setErrors);
