@@ -22,7 +22,7 @@
     height: 676px;
     border-radius: 3px;
     background-color: #fff;
-
+    z-index: 99;
 }
 .close {
     position: absolute;

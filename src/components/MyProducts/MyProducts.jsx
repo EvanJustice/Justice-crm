@@ -11,22 +11,22 @@ import {EditModal} from "../EditModal/EditModal.jsx";
 import {useState} from "react";
 import {SellModal} from "../SellModal/SellModal.jsx";
 import { useSelector, useDispatch} from "react-redux";
-import {actions} from "../../app/tableDataSlice.js";
+import {takeTableData, deleteRow} from "../../app/tableDataSlice.js";
 
 
 
 export const MyProducts = ({inputstate, sellValue, setSellValue}) =>{
     const [showModal, setShowModal] = useState(false);
     const [showSellModal, setShowSellModal] = useState(false);
-    const tableData = useSelector((state) => state.tableData)
+    const tableData = useSelector((state) => state.tableData.tableData)
     const dispatch = useDispatch()
 
     const showEditForm = (item) => {
-        dispatch(actions.takeTableData(item));
+        dispatch(takeTableData(item));
         setShowModal(!showModal);
     }
     const showSellForm = (item) => {
-        dispatch(actions.takeTableData(item));
+        dispatch(takeTableData(item));
         setShowSellModal(!showSellModal)
     }
 
@@ -72,7 +72,7 @@ export const MyProducts = ({inputstate, sellValue, setSellValue}) =>{
                                                     Sell
                                                 </div>
                                                 <Edit onClick={() => showEditForm(el)}/>
-                                                <div onClick={() => dispatch(actions.deleteRow(el.key))} className={styles.delete}>
+                                                <div onClick={() => dispatch(deleteRow(el.key))} className={styles.delete}>
                                                     <Delete/>
                                                 </div>
                                         </div>

@@ -8,6 +8,7 @@ import {MainPage} from "./components/MainPage/MainPage.jsx";
 import {Routes, Route, Navigate} from "react-router-dom";
 import {ModalProduct} from "./components/ModalProduct/ModalProduct.jsx";
 import {useEffect, useState} from "react";
+import { useSelector} from "react-redux";
 
 const inputData = [
     {key: 1, placeholder: 'Store', value:'', name:'store'},
@@ -22,7 +23,8 @@ export const App = () => {
     const[inputState, setInputState] = useState(inputData)
     const [showModal, setShowModal] = useState(false);
     const [sellValue, setSellValue] = useState(null);
-    const [auth, setAuth] = useState(false)
+    const auth = useSelector((state) => state.auth)
+
     useEffect(() => {
         localStorage.setItem('auth', JSON.stringify(auth))
     },[auth])
@@ -30,14 +32,14 @@ export const App = () => {
     return !auth ?
         <>
             <Routes>
-                <Route path="/login" element={<SignIn auth={auth} setAuth={setAuth} />} />
-                <Route path="/register" element={<SignUp auth={auth} setAuth={setAuth} />} />
+                <Route path="/login" element={<SignIn  />} />
+                <Route path="/register" element={<SignUp  />} />
                 <Route path="*" element={<Navigate to='/register' replace />} />
             </Routes>
         </> : <>
             <Routes>
-                <Route path='/' element={<Layout setAuth={setAuth}  modal={showModal} setModal={setShowModal} data={inputState} setData={setInputState} />}>
-                    <Route index element={<MainPage />} />
+                <Route path='/' element={<Layout   modal={showModal} setModal={setShowModal} data={inputState} setData={setInputState} />}>
+                    <Route index element={<MainPage  />} />
                     <Route path="/create" element={<ModalProduct />} />
                     <Route path="/cabinet" element={<Cabinet />} />
                     <Route path="/sales" element={<MySales sellValue={sellValue} setSellValue={setSellValue} />} />

@@ -1,11 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { reducer } from "./tableDataSlice.js";
+import tableDataReducer from "./tableDataSlice.js";
+import authSliceReducer from "./authSlice.js";
+import usersSlice from "./usersSlice.js";
+import snackBarSlice from "./snackBarSlice.js";
+
 
 
 
 
 export const store = configureStore({
-    reducer: reducer,
+    reducer: {
+        tableData: tableDataReducer,
+        auth: authSliceReducer,
+        users: usersSlice,
+        snackBar: snackBarSlice,
+    }
 })
 
 

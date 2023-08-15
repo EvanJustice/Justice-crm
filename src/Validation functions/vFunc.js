@@ -1,9 +1,9 @@
 export const nameValidation = (values, errors, setErrors) => {
-    const reg = /^[A-Za-z_ ]{6,}$/
+    const reg = /^[A-Za-z_ ]{3,}$/
     if(!values.firstname.match(reg)){
         setErrors((prevState) => ({
             ...prevState,
-            firstname: "Only English letters and spaces!(min 6characters)",
+            firstname: "Only English letters and spaces!(min 3characters)",
         }));
         return false
     } else {
@@ -13,20 +13,13 @@ export const nameValidation = (values, errors, setErrors) => {
         }));
         return true
     }
-    //  else {
-    //     setErrors((prevState) => ({
-    //         ...prevState,
-    //         lastname: '',
-    //     }));
-    //     return true
-    // }
 }
 export const lNameValidation = (values, errors, setErrors) => {
-    const reg = /^[A-Za-z_ ]{6,}$/
+    const reg = /^[A-Za-z_ ]{3,}$/
     if(!values.lastname.match(reg)){
         setErrors((prevState) => ({
             ...prevState,
-            lastname: "Only English letters and spaces!(min 6characters)",
+            lastname: "Only English letters and spaces!(min 3characters)",
         }));
         return false
     } else {
@@ -38,11 +31,11 @@ export const lNameValidation = (values, errors, setErrors) => {
     }
 }
 export const companyValidation = (values, errors, setErrors) => {
-    const reg = /^[A-Za-z_ ]{6,}$/
+    const reg = /^[A-Za-z_ ]{3,}$/
     if(!values.companyname.match(reg)){
         setErrors((prevState) => ({
             ...prevState,
-            companyname: "Only English letters and spaces!(min 6characters)",
+            companyname: "Only English letters and spaces!(min 3characters)",
         }));
         return false
     } else {
@@ -55,7 +48,7 @@ export const companyValidation = (values, errors, setErrors) => {
 }
 
 export const emailValidation = (values, errors, setErrors) => {
-    const reg = /^[a-z0-9](\.?[a-z0-9]){2,}@g(oogle)?mail\.com$/
+    const reg = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/
     if(!values.email.match(reg) || values.email === ''){
         setErrors((prevState) => ({...prevState, email: "Invalid Email!"}));
         return false
@@ -68,7 +61,7 @@ export const emailValidation = (values, errors, setErrors) => {
 export const passwordValidation = (values, errors, setErrors) => {
     const reg = /^(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+=]).*$/
     if(!values.password.match(reg)){
-        setErrors((prevState) => ({...prevState, password: 'Should be min 6 characters (1-lowercase, 1-Uppercase, 1-number, 1-spec symbol)!'}));
+        setErrors((prevState) => ({...prevState, password: 'invalid password!'}));
         return false
     } else {
         setErrors((prevState) => ({...prevState, password: ""}));

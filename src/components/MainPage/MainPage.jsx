@@ -1,6 +1,8 @@
 // import styles from 'MainPage.module.css'
 
+
 export const MainPage = () =>{
+
     return (
         <div >
             {/*<div className={styles.box1}>box1</div>*/}
