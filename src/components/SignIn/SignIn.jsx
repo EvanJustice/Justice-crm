@@ -3,8 +3,12 @@ import {useState} from "react";
 import {emailValidation, passwordValidation, inputes} from "../../Validation functions/vFunc.js";
 import {Link} from "react-router-dom";
 import {TextField} from "@mui/material";
+import {useDispatch, useSelector} from "react-redux";
+import {toggleAuth} from "../../app/authSlice.js";
 
-export const SignIn = ({setAuth}) => {
+export const SignIn = () => {
+    const auth = useSelector((state) => state.auth)
+    const dispatch = useDispatch()
     const [values, setValues] = useState({
         email:"",
         password:"",
@@ -30,10 +34,9 @@ export const SignIn = ({setAuth}) => {
             const filterUsers = usersFromStorage.filter((el) => (
                 el.email === values.email && el.password === values.password
             ))
-            console.log(66666, filterUsers)
             if (filterUsers.length > 0){
-                localStorage.setItem('currentUser', JSON.stringify(values))
-                setAuth(true)
+                localStorage.setItem('userID', JSON.stringify(filterUsers[0].id))
+                dispatch(toggleAuth(auth))
             }
         }
             else if(!emailValidation(values, errors, setErrors) || !passwordValidation(values, errors, setErrors)) {

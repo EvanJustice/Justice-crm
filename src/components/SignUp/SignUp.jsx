@@ -12,8 +12,14 @@ import {
 } from "../../Validation functions/vFunc.js";
 import {Link} from "react-router-dom";
 import {TextField} from "@mui/material";
+import {useDispatch, useSelector} from "react-redux";
+import {toggleAuth} from "../../app/authSlice.js";
+import {addUser} from "../../app/usersSlice.js";
 
-export const SignUp = ({auth, setAuth}) => {
+export const SignUp = () => {
+    const dispatch = useDispatch()
+    const auth = useSelector((state) => state.auth)
+    const users = useSelector((state) => state.users)
     const [values, setValues] = useState({
             firstname: "",
             lastname: "",
@@ -23,14 +29,12 @@ export const SignUp = ({auth, setAuth}) => {
             confirmpassword: "",
         }
     );
+
     const [errors, setErrors] = useState({});
-    const user = JSON.parse(localStorage.getItem('users') ?? '[]') ?? [];
-    const [userArray, setUserArray] = useState(user ?? []);
+
     useEffect(() => {
-        if(userArray?.length > 0){
-            localStorage.setItem('users', JSON.stringify(userArray))
-        }
-    },[userArray])
+            localStorage.setItem('users', JSON.stringify(users))
+    },[users])
 
     const onChange = (e) =>{
         setValues({...values, [e.target.name]: e.target.value} );
@@ -38,18 +42,10 @@ export const SignUp = ({auth, setAuth}) => {
             ...errors,
             [e.target.name]: '',
         })
-        console.log('errors ---> ', errors)
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        nameValidation(values, errors, setErrors);
-        lNameValidation(values, errors, setErrors);
-        companyValidation(values, errors, setErrors);
-        emailValidation(values, errors, setErrors);
-        passwordValidation(values, errors, setErrors);
-        passwordCheck(values, errors, setErrors);
-
         if(nameValidation(values, errors, setErrors) &&
             lNameValidation(values, errors, setErrors) &&
             companyValidation(values, errors, setErrors) &&
@@ -57,18 +53,22 @@ export const SignUp = ({auth, setAuth}) => {
             passwordValidation(values, errors, setErrors) &&
             passwordCheck(values, errors, setErrors)
         ) {
-            const storageEmailCheck = userArray.filter((el) => (
+            const storageEmailCheck = users.filter((el) => (
                 el?.email === values.email)
             )
             if(storageEmailCheck?.length > 0){
                 alert('почта занята')
-                console.log('наш массивчик --->', userArray)
             } else {
-                console.log('тут сетим')
-                setUserArray([...userArray, values])
-                localStorage.setItem('auth', JSON.stringify(auth))
-                setAuth(true)
-                console.log('наш массивчик --->', userArray)}
+                dispatch(addUser(values))
+                const usersFromStorage = JSON.parse(localStorage.getItem('users'))
+                const filterUsers = usersFromStorage.filter((el) => (
+                    el.email === values.email && el.password === values.password
+                ))
+                if (filterUsers.length > 0){
+                    localStorage.setItem('userID', JSON.stringify(filterUsers[0].id))
+                }
+                dispatch(toggleAuth(auth))
+            }
         }
     }
     return (

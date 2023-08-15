@@ -8,7 +8,7 @@ import styles from "../MyProducts/MyProducts.module.css";
 import {useSelector} from "react-redux";
 
 export const MySales = () =>{
-    const sellData = useSelector((state) => state.sellData)
+    const sellData = useSelector((state) => state.tableData.sellData)
 const cells = [
     'Product Name',
     'Store',

@@ -3,7 +3,7 @@ import {ReactComponent as Plus} from "../../assets/Plus.svg";
 import { useState } from "react";
 import {TextField} from "@mui/material";
 import { useDispatch } from "react-redux";
-import {actions} from "../../app/tableDataSlice.js";
+import {addRow} from "../../app/tableDataSlice.js";
 
 
 
@@ -15,6 +15,7 @@ export const ModalProduct = ({modal, setModal, data}) => {
     const [value, setValue] = useState({});
     const [error, setError] = useState({})
     const [focus, setFocus] = useState(false)
+
 
 
     const clickOutside = (e) => {
@@ -39,8 +40,7 @@ export const ModalProduct = ({modal, setModal, data}) => {
             })
             const finalErrors = Object.assign({}, ...errorMessage );
             setError(finalErrors);
-
-            console.log("IF ERR", error)
+            setFocus(true)
         } else {
             const filtered = data?.filter((el) => !value[`${el?.name}`]);
             const errorMessage = filtered.map(item => {
@@ -50,9 +50,9 @@ export const ModalProduct = ({modal, setModal, data}) => {
             })
             const finalErrors = Object.assign({}, ...errorMessage );
             setError(finalErrors);
+            setFocus(true)
             if (Object.keys(finalErrors).length === 0) {
-                console.log('setrow setrow setrow')
-                dispatch(actions.addRow(value));
+                dispatch(addRow(value));
                 setFocus(false);
                 setModal(!modal);
                 setValue(null);

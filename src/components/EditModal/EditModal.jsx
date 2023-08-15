@@ -1,26 +1,26 @@
 import styles from './EditModal.module.css'
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {actions} from "../../app/tableDataSlice.js";
+import {editRow, } from "../../app/tableDataSlice.js";
+import {TextField} from "@mui/material";
 
 
 export const EditModal = ({ show, setshow, input}) => {
-    const dataEdit = useSelector((state) => state.dataEdit);
+    const dataEdit = useSelector((state) => state.tableData.dataEdit);
     const dispatch = useDispatch();
-
-
     const[value, setValue] = useState(null);
-    console.log(value)
     const clickXMark = () => {
         setshow(!show)
     }
     const updateState = () => {
-        dispatch(actions.editRow(value))
+        dispatch(editRow(value))
     };
     const savingChanges = (e) => {
-        e.preventDefault();
-        updateState();
-        setshow(!show)
+        if(+value.remains >0 && +value.price >0 && +value.weight>0){
+            e.preventDefault();
+            updateState();
+            setshow(!show)
+        }
     }
     useEffect(() => {
         if (dataEdit) {
@@ -43,14 +43,15 @@ export const EditModal = ({ show, setshow, input}) => {
                 <h1 className={styles.h1}>Editing a product</h1>
                 {
                     input.map((el, index) => (
-                        <input
+                        <TextField
                             className={styles.input}
                             key={index}
                             type="text"
+                            margin='normal'
                             name={el?.name}
                             onChange={(e) => onChange(e)}
                             defaultValue={dataEdit ? dataEdit[el?.name] : ''}
-                            placeholder={el.name}
+                            label={el.placeholder}
                         />
                     ))
                 }

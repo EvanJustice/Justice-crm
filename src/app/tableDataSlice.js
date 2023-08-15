@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { productDate, fixDataValue } from './functions.js'
+import {currentUser} from "../components/Cabinet/index.js";
 
 const initialState ={
     tableData: JSON.parse(localStorage.getItem('tableData')) ?? [],
@@ -20,7 +21,7 @@ const tableDataSlice = createSlice({
         addRow: (state= initialState, action) => {
              state?.tableData?.unshift({...action.payload,
                      key: (new Date).getTime(),
-                     address: 'Krylatskaya street',
+                     address: currentUser.address,
                      creationDate: productDate()
                  })
             localStorage.setItem("tableData", JSON.stringify(state.tableData));
@@ -29,7 +30,6 @@ const tableDataSlice = createSlice({
         takeTableData: (state , action) => {
             state.dataEdit = {...action.payload}
         },
-            // Object.assign({...state.tableData}, action.payload),
 
         editRow: (state = initialState, action) => {
             state.tableData = state.tableData.map((item) => {
@@ -40,7 +40,7 @@ const tableDataSlice = createSlice({
             })
             localStorage.setItem("tableData", JSON.stringify(state.tableData));
     },
-        sellProduct: (state, action) => {
+        sellItem: (state, action) => {
             state.tableData = state.tableData.map((item) => {
                 if (item.key === state.dataEdit.key) {
                     return {...item, remains: +state.dataEdit?.remains - +action.payload?.remains,
@@ -78,4 +78,5 @@ const tableDataSlice = createSlice({
 })
 
 
-export const { actions, reducer} = tableDataSlice;
+export default tableDataSlice.reducer
+export const { deleteRow, addRow, takeTableData, editRow, sellItem} = tableDataSlice.actions

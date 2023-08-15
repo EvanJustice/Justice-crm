@@ -6,9 +6,11 @@ import {ReactComponent as Percent} from "../../assets/Percent.svg";
 import {ReactComponent as User} from "../../assets/User.svg";
 import {ReactComponent as Logout} from "../../assets/Logout.svg";
 import {ReactComponent as Create} from "../../assets/Create.svg";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {ModalProduct} from "../ModalProduct/ModalProduct.jsx";
+import {useSelector, useDispatch} from "react-redux";
+import {toggleAuth} from "../../app/authSlice.js";
 
 
 const linksArray = [
@@ -37,12 +39,23 @@ const linksArray = [
         link: '/cabinet'
     }]
 // eslint-disable-next-line react/prop-types
-export const Layout = ({ setAuth, modal, setModal, data}) => {
+export const Layout = ({  modal, setModal, data}) => {
+    const auth = useSelector((state) => state.auth)
+    const dispatch = useDispatch()
     const history = useLocation();
     const [active, setActive] = useState(history.pathname)
     const[errors, setErrors] = useState("")
     const navigate = useNavigate();
-    console.log(history.pathname)
+    const reloadCount = Number(sessionStorage.getItem('reloadCount')) || 0;
+
+    useEffect(() => {
+        if(reloadCount < 1) {
+            sessionStorage.setItem('reloadCount', String(reloadCount + 1));
+            window.location.reload();
+        } else {
+            sessionStorage.removeItem('reloadCount');
+        }
+    }, []);
     const titles = (linkName) => {
         switch (linkName) {
             case '/':
@@ -60,8 +73,11 @@ export const Layout = ({ setAuth, modal, setModal, data}) => {
         }
     }
     const logout = () => {
-        localStorage.removeItem("currentUser")
-        setAuth(false)
+        console.log('click logout')
+        localStorage.removeItem("tableData")
+        localStorage.removeItem("sellData")
+        localStorage.removeItem("userID")
+        dispatch(toggleAuth(auth))
     }
     const onClick = (link) =>{
         setActive(link);

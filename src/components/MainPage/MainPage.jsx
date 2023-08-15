@@ -1,6 +1,9 @@
 // import styles from 'MainPage.module.css'
 
+import {useEffect} from "react";
+
 export const MainPage = () =>{
+
     return (
         <div >
             {/*<div className={styles.box1}>box1</div>*/}

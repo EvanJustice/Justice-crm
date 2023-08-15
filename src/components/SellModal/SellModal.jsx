@@ -2,10 +2,10 @@ import styles from './SellModal.module.css'
 import {useEffect, useState} from "react";
 import {TextField} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {actions} from "../../app/tableDataSlice.js";
+import {sellItem} from '../../app/tableDataSlice.js'
 
 export const SellModal = ({ sellValue, setSellValue, show, setShow}) => {
-    const dataEdit = useSelector((state) => state.dataEdit)
+    const dataEdit = useSelector((state) => state.tableData.dataEdit)
     const dispatch = useDispatch();
     const [remainsFocus, setRemainsFocus] = useState(false);
     const [lastSaleFocus, setLastSaleFocus] = useState(false);
@@ -56,7 +56,7 @@ export const SellModal = ({ sellValue, setSellValue, show, setShow}) => {
             sellValue.hasOwnProperty('remains') &&
             sellValue.hasOwnProperty('lastSale')
         ){
-            dispatch(actions.sellProduct(sellValue))
+            dispatch(sellItem(sellValue))
             setSellValue(null)
             setZeroValue1("")
             setZeroValue2("")
