@@ -1,6 +1,5 @@
 // import styles from 'MainPage.module.css'
 
-import {useEffect} from "react";
 
 export const MainPage = () =>{
 

@@ -7,14 +7,8 @@ import {SnackBar} from "../SnackBar/SnackBar.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {toggleOpen} from "../../app/snackBarSlice.js";
 
-
-
-
-
-
 export const Cabinet = () =>{
     const dispatch = useDispatch()
-    const open = useSelector((state)=> state.snackBar)
     const myObj = inputs.reduce((acc, el) => {
         return {...acc, [el.name]: el.defaultValue}
     }, {})
