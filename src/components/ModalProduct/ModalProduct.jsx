@@ -4,7 +4,6 @@ import { useState } from "react";
 import {TextField} from "@mui/material";
 import { useDispatch } from "react-redux";
 import {addRow} from "../../app/tableDataSlice.js";
-import {SnackBar} from "../SnackBar/SnackBar.jsx";
 import {toggleOpen} from "../../app/snackBarSlice.js";
 
 

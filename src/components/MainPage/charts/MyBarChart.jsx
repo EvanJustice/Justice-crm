@@ -8,21 +8,6 @@ import {
 } from "recharts";
 import {useSelector} from "react-redux";
 
-const data = [
-    {
-        name: "Page A",
-        uv: 4000,
-        pv: 2400,
-        amt: 2400
-    },
-    {
-        name: "Page B",
-        uv: 3000,
-        pv: 1398,
-        amt: 2210
-    },
-];
-
 export const MyBarChart = () => {
     const sellData = useSelector((state) => state.tableData.sellData)
     const myData = sellData.map((el) => {return {name: el.store + ' ' + el.productName, money: (+el.remains * +el.price), } })
