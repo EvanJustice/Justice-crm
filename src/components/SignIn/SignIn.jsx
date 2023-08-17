@@ -27,8 +27,6 @@ export const SignIn = () => {
     };
     const handleSubmit = (e) => {
         e.preventDefault();
-        emailValidation(values, errors, setErrors);
-        passwordValidation(values, errors, setErrors);
         if (emailValidation(values, errors, setErrors) && passwordValidation(values, errors, setErrors)) {
             const usersFromStorage = JSON.parse(localStorage.getItem('users'))
             const filterUsers = usersFromStorage.filter((el) => (
