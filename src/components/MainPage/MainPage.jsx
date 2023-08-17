@@ -1,13 +1,16 @@
-// import styles from 'MainPage.module.css'
-
-
+import styles from './MainPage.module.css'
+import {MyPieChart} from "./charts/MyPieChart.jsx";
+import {MyLineChart} from "./charts/MyLineChart.jsx";
+import {MyBarChart} from "./charts/MyBarChart.jsx";
 export const MainPage = () =>{
 
     return (
-        <div >
-            {/*<div className={styles.box1}>box1</div>*/}
-            {/*<div className={styles.box2}>box2</div>*/}
-            {/*<div className={styles.box3}>box3</div>*/}
+        <div className={styles.content}>
+            <div className={styles.twoCharts}>
+                <MyPieChart />
+                <MyLineChart />
+            </div>
+            <MyBarChart />
         </div>
     )
 }

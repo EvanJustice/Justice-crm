@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {TextField} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
 import {sellItem} from '../../app/tableDataSlice.js'
+import {toggleOpen} from "../../app/snackBarSlice.js";
 
 export const SellModal = ({ sellValue, setSellValue, show, setShow}) => {
     const dataEdit = useSelector((state) => state.tableData.dataEdit)
@@ -62,7 +63,9 @@ export const SellModal = ({ sellValue, setSellValue, show, setShow}) => {
             setZeroValue2("")
             setErrorRemains("")
             setErrorLastSale("")
-            setShow(!show);}
+            setShow(!show);
+            dispatch(toggleOpen())}
+
     }
 
     const onChangeRemains = (e) => {

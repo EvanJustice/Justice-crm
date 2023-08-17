@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {editRow, } from "../../app/tableDataSlice.js";
 import {TextField} from "@mui/material";
+import {toggleOpen} from "../../app/snackBarSlice.js";
 
 
 export const EditModal = ({ show, setshow, input}) => {
@@ -20,6 +21,7 @@ export const EditModal = ({ show, setshow, input}) => {
             e.preventDefault();
             updateState();
             setshow(!show)
+            dispatch(toggleOpen())
         }
     }
     useEffect(() => {

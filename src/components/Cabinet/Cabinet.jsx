@@ -4,7 +4,7 @@ import {inputs} from "./index.js";
 import { useState} from "react";
 import {emailValidation, passwordValidation} from '../../Validation functions/vFunc.js'
 import {SnackBar} from "../SnackBar/SnackBar.jsx";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {toggleOpen} from "../../app/snackBarSlice.js";
 
 export const Cabinet = () =>{

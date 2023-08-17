@@ -4,19 +4,16 @@ import { useState } from "react";
 import {TextField} from "@mui/material";
 import { useDispatch } from "react-redux";
 import {addRow} from "../../app/tableDataSlice.js";
-
+import {SnackBar} from "../SnackBar/SnackBar.jsx";
+import {toggleOpen} from "../../app/snackBarSlice.js";
 
 
 // eslint-disable-next-line react/prop-types
 export const ModalProduct = ({modal, setModal, data}) => {
-
     const dispatch = useDispatch()
-
     const [value, setValue] = useState({});
     const [error, setError] = useState({})
     const [focus, setFocus] = useState(false)
-
-
 
     const clickOutside = (e) => {
         if(e.target === e.currentTarget){
@@ -54,6 +51,7 @@ export const ModalProduct = ({modal, setModal, data}) => {
             if (Object.keys(finalErrors).length === 0) {
                 dispatch(addRow(value));
                 setFocus(false);
+                dispatch(toggleOpen())
                 setModal(!modal);
                 setValue(null);
             }

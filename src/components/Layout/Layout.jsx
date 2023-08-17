@@ -11,6 +11,7 @@ import {Outlet, useLocation, useNavigate} from "react-router-dom";
 import {ModalProduct} from "../ModalProduct/ModalProduct.jsx";
 import {useSelector, useDispatch} from "react-redux";
 import {toggleAuth} from "../../app/authSlice.js";
+import {SnackBar} from "../SnackBar/SnackBar.jsx";
 
 
 const linksArray = [
@@ -122,6 +123,7 @@ export const Layout = ({  modal, setModal, data}) => {
             </aside>
             <div>
                 <header className={styles.header}>
+                    <SnackBar/>
                     <div>
                         {/* eslint-disable-next-line react/prop-types */}
                         <h1 className={styles.h1}>{titles(history.pathname)?.title}</h1>

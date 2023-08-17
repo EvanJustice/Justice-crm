@@ -1,0 +1,50 @@
+.typo_pie {
+    margin-top: 0 !important;
+    font-size: 0.8em !important;
+}
+hr{
+    opacity: 0.4;
+    margin-top: 8px;
+    width: inherit;
+}
+.content_pie:last-child hr {
+    display: none;
+}
+.content__pie{
+    background-color: #F8F8F8;
+    padding: 32px;
+    border-radius: 3px;
+}
+.content_bar{
+    background-color: #F8F8F8;
+    padding: 32px;
+    border-radius: 3px;
+}
+.content_line{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 24px;
+    background-color: #F8F8F8;
+    padding: 32px;
+    border-radius: 3px;
+}
+
+.box_pie {
+    display: flex;
+    flex-direction: column;
+}
+.none {
+    display: none;
+}
+
+.text_bar{
+    padding-left: 30px;
+}
+.h6_bar {
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    margin-bottom: 30px;
+    margin-top: 8px;
+}
