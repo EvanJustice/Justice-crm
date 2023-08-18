@@ -22,7 +22,7 @@ export const MyPieChart= () => {
         <div className={ sellData.length > 1 ? styles.content__pie : styles.none}>
             <Box sx={sellData.length > 1 ? {display:"flex", alignItems:'center'} : {display:"none"}}>
                 <div className={styles.box_pie}>
-                <h1 style={{marginBottom:'12px'}}>Amount of sold products by name</h1>
+                <h1 style={{marginBottom:'24px'}}>Amount of sold products by name</h1>
                 <PieChart width={200} height={200}>
                     <Pie
                         data={myData}
@@ -38,7 +38,7 @@ export const MyPieChart= () => {
                     <Tooltip />
                 </PieChart>
                 </div>
-                <Stack gap={2}>
+                <Stack marginTop={4} gap={2}>
                    <Box >
                        {myData.map((el,i)=>(
                                <div key={el.color} className={styles.content_pie}>

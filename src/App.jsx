@@ -11,12 +11,12 @@ import {useEffect, useState} from "react";
 import { useSelector} from "react-redux";
 
 const inputData = [
-    {key: 1, placeholder: 'Store', value:'', name:'store'},
-    {key: 2, placeholder: 'Price', value:'', name:'price'},
-    {key: 3, placeholder: 'Product name', value:'', name:'productName'},
-    {key: 4, placeholder: 'Product Category', value:'', name:'category'},
+    {key: 1, placeholder: 'Store', value:'', name:'store', focus: false},
+    {key: 2, placeholder: 'Price', value:'', name:'price', focus: false},
+    {key: 3, placeholder: 'Product name', value:'', name:'productName', focus: false},
+    {key: 4, placeholder: 'Product Category', value:'', name:'category', focus: false},
     {key: 5, placeholder: 'Quantity of goods', value:'', name:'remains'},
-    {key: 6, placeholder: 'Weight/Volume of one item', value:'', name:'weight'}
+    {key: 6, placeholder: 'Weight/Volume of one item', value:'', name:'weight', focus: false}
 ]
 
 export const App = () => {

@@ -12,21 +12,28 @@ hr{
 }
 .content__pie{
     background-color: #F8F8F8;
-    padding: 32px;
+    padding: 14px 24px 24px 24px;
     border-radius: 3px;
 }
-.content_bar{
+.content_bar {
     background-color: #F8F8F8;
-    padding: 32px;
+    padding: 14px 32px;
     border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
+
+
+
+
 .content_line{
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 24px;
     background-color: #F8F8F8;
-    padding: 32px;
+    padding: 14px 32px;
     border-radius: 3px;
 }
 

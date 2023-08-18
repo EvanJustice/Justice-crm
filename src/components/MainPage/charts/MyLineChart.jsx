@@ -17,7 +17,7 @@ export const MyLineChart = () => {
 
     return(
         <div className={sellData.length > 1 ? styles.content_line : styles.none}>
-            <h1 style={{width: '100%' }}>Total earned </h1>
+            <h1 style={{width: '100%', marginBottom: '20px' }}>Total earned </h1>
             <LineChart
                 width={400}
                 height={100}

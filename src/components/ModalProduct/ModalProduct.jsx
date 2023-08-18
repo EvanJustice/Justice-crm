@@ -14,6 +14,7 @@ export const ModalProduct = ({modal, setModal, data}) => {
     const [error, setError] = useState({})
     const [focus, setFocus] = useState(false)
 
+
     const clickOutside = (e) => {
         if(e.target === e.currentTarget){
             setFocus(false)
