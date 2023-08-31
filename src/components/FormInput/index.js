@@ -1,1 +1,1 @@
-export {FormInput} from './FormInput.jsx'
+export {FormInput} from './FormInput.tsx'

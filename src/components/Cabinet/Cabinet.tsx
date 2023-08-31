@@ -1,13 +1,16 @@
 import styles from './Cabinet.module.css'
-import { TextField } from "@mui/material";
+import {TextField} from "@mui/material";
 import {inputs} from "./index.js";
 import { useState} from "react";
-import {emailValidation, passwordValidation} from '../../Validation functions/vFunc.js'
-import {SnackBar} from "../SnackBar/SnackBar.jsx";
-import {useDispatch} from "react-redux";
-import {toggleOpen} from "../../app/snackBarSlice.js";
+import {emailValidation, passwordValidation} from '../../Validation functions/vFunc.ts'
+import {useDispatch, useSelector} from "react-redux";
+import {switchAction, toggleOpen} from "../../redux/snackBarSlice.ts";
+
 
 export const Cabinet = () =>{
+    const text = useSelector((state) => state.snackBar.alert.text)
+    const severity = useSelector((state)=> state.snackBar.alert.severity)
+    const color = useSelector((state) => state.snackBar.alert.color)
     const dispatch = useDispatch()
     const myObj = inputs.reduce((acc, el) => {
         return {...acc, [el.name]: el.defaultValue}
@@ -15,6 +18,7 @@ export const Cabinet = () =>{
     const[errors, setErrors] = useState({})
     const[values, setValues] = useState(myObj)
     const[isDisabled, setIsDisabled] = useState(true)
+
     const onSubmit = () => {
         const userID = JSON.parse(localStorage.getItem('userID'))
         const usersArray = JSON.parse(localStorage.getItem('users'))
@@ -59,6 +63,7 @@ export const Cabinet = () =>{
                     return obj
                 })
                 localStorage.setItem("users", JSON.stringify(updatedUsers))
+                dispatch(switchAction('editProf'))
                 dispatch(toggleOpen())
                 setIsDisabled(true)
             } else {
@@ -74,6 +79,7 @@ export const Cabinet = () =>{
                         return obj
                     })
                     localStorage.setItem("users", JSON.stringify(updatedUsers))
+                    dispatch(switchAction('editPass'))
                     dispatch(toggleOpen())
                     setIsDisabled(true)
                     setValues({...values, oldpassword:'', password:'' })
@@ -89,27 +95,26 @@ export const Cabinet = () =>{
     }
 
     return (
-        <>
-        <div className={styles.container}>
-            <SnackBar/>
-            {
-                inputs.map((el, index) => (
-                    <TextField
-                        size='small'
-                        key={index}
-                        type={el.type}
-                        error={Boolean(errors[el?.name])}
-                        helperText={errors[el?.name]}
-                        name={el.name}
-                        label={el.label}
-                        className={styles[el.classname]}
-                        value={values[el.name]}
-                        onChange={(e) => onChange(e)}
-                    />
-                ))
-            }
+        <div className={styles.content}>
+            <div className={styles.container}>
+                {
+                    inputs.map((el, index) => (
+                        <TextField
+                            size='small'
+                            key={index}
+                            type={el.type}
+                            error={Boolean(errors[el?.name])}
+                            helperText={errors[el?.name]}
+                            name={el.name}
+                            label={el.label}
+                            className={styles[el.classname]}
+                            value={values[el.name]}
+                            onChange={(e) => onChange(e)}
+                        />
+                    ))
+                }
+                <button disabled={isDisabled} onClick={()=>onSubmit()} className={styles.button}>Save changes</button>
+            </div>
         </div>
-            <button disabled={isDisabled} onClick={()=>onSubmit()} className={styles.button}>Save changes</button>
-        </>
     )
 }

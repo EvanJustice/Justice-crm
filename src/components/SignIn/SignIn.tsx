@@ -1,10 +1,10 @@
 import styles from './Signin.module.css'
 import {useState} from "react";
-import {emailValidation, passwordValidation, inputes} from "../../Validation functions/vFunc.js";
+import {emailValidation, passwordValidation, inputes} from "../../Validation functions/vFunc.ts";
 import {Link} from "react-router-dom";
 import {TextField} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {toggleAuth} from "../../app/authSlice.js";
+import {toggleAuth} from "../../redux/authSlice.ts";
 
 export const SignIn = () => {
     const auth = useSelector((state) => state.auth)

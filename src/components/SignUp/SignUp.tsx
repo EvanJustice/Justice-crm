@@ -9,12 +9,12 @@ import {
     passwordCheck,
     nameInputs,
     inputs, lNameValidation
-} from "../../Validation functions/vFunc.js";
+} from "../../Validation functions/vFunc.ts";
 import {Link} from "react-router-dom";
 import {TextField} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {toggleAuth} from "../../app/authSlice.js";
-import {addUser} from "../../app/usersSlice.js";
+import {toggleAuth} from "../../redux/authSlice.ts";
+import {addUser} from "../../redux/usersSlice.ts";
 
 export const SignUp = () => {
     const dispatch = useDispatch()

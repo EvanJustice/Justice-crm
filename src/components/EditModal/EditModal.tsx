@@ -1,15 +1,16 @@
 import styles from './EditModal.module.css'
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {editRow, } from "../../app/tableDataSlice.js";
-import {TextField} from "@mui/material";
-import {toggleOpen} from "../../app/snackBarSlice.js";
+import {editRow, } from "../../redux/tableDataSlice";
+import {TextField, useMediaQuery} from "@mui/material";
+import {toggleOpen, switchAction} from "../../redux/snackBarSlice";
 
 
-export const EditModal = ({ show, setshow, input}) => {
+export const EditModal = ({value, setValue, show, setshow, input}) => {
     const dataEdit = useSelector((state) => state.tableData.dataEdit);
     const dispatch = useDispatch();
-    const[value, setValue] = useState(null);
+    const is720 = useMediaQuery('(min-width:800px)')
+
     const clickXMark = () => {
         setshow(!show)
     }
@@ -21,7 +22,9 @@ export const EditModal = ({ show, setshow, input}) => {
             e.preventDefault();
             updateState();
             setshow(!show)
+            dispatch(switchAction('editProd'))
             dispatch(toggleOpen())
+
         }
     }
     useEffect(() => {
@@ -50,10 +53,11 @@ export const EditModal = ({ show, setshow, input}) => {
                             key={index}
                             type="text"
                             margin='normal'
+                            size={ is720 ? "medium" : 'small' }
                             name={el?.name}
                             onChange={(e) => onChange(e)}
-                            defaultValue={dataEdit ? dataEdit[el?.name] : ''}
                             label={el.placeholder}
+                            value={value ? value[el.name] : ''}
                         />
                     ))
                 }

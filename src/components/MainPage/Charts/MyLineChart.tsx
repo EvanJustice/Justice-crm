@@ -6,6 +6,7 @@ import {
     YAxis,
     CartesianGrid,
     Tooltip,
+    ResponsiveContainer
 } from "recharts";
 import {Typography} from "@mui/material";
 import {useSelector} from "react-redux";

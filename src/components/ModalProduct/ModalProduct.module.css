@@ -1,6 +1,7 @@
 .containerWrapper {
+    z-index: 5;
     height: 100vh;
-    width: 100vw;
+    width: 105vw;
     position: absolute;
     top: 0;
     left: 0;
@@ -13,7 +14,7 @@
     display: none;
 }
 .content {
-    position: relative;
+    position: fixed;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -22,7 +23,7 @@
     height: 676px;
     border-radius: 3px;
     background-color: #fff;
-    z-index: 99;
+
 }
 .close {
     position: absolute;
@@ -85,5 +86,31 @@
 .inputDiv {
     margin-bottom: 10px;
 }
-
+@media (width < 1015px) {
+    .containerWrapper {
+        height: 100lh;
+        align-items: unset;
+    }
+    .content{
+        margin-top: 100px;
+    }
+}
+@media (width < 800px) {
+    .content{
+        width: 320px;
+        height: 580px;
+        margin-top: 70px;
+    }
+    .submit{
+        height: 40px;
+        width: 250px;
+    }
+    .inputDiv {
+        margin-bottom: 20px;
+    }
+    .input {
+        width: 250px;
+        height: 40px;
+    }
+}
 

@@ -1,0 +1,56 @@
+.content{
+    position: absolute;
+    right: 10%;
+    top: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 16px 4px 8px ;
+    background-color: rgba(250,128,114);
+    transform: scale(0);
+}
+.contentActive{
+    position: absolute;
+    right: 10%;
+    top: 10%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 16px 4px 8px ;
+    background-color: rgba(250,128,114);
+    transform: scale(1);
+}
+
+.button {
+    width: 60px;
+    background: #5382E7;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 2px;
+}
+
+.buttBox{
+    display: flex;
+    gap: 20px;
+    margin-top: 12px;
+}
+.button:hover {
+    cursor: pointer;
+}
+
+.h6{
+    margin-top: 12px;
+}
+
+@media (width < 800px) {
+    .contentActive{
+        top: 40%;
+    }
+}

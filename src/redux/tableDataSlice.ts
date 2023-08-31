@@ -1,11 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { productDate, fixDataValue } from './functions.js'
-import {currentUser} from "../components/Cabinet/index.js";
+import { productDate, fixDataValue } from './functions'
+import {currentUser} from "../components/Cabinet";
+import {TableDataType} from "../types/MyTypes";
 
-const initialState ={
-    tableData: JSON.parse(localStorage.getItem('tableData')) ?? [],
+type InitStateType = {
+    tableData: TableDataType[]
+    dataEdit: TableDataType
+    sellData: TableDataType[]
+}
+const initialState: InitStateType ={
+    tableData: JSON.parse(localStorage.getItem('tableData')!) ?? [],
     dataEdit: {},
-    sellData: JSON.parse(localStorage.getItem('sellData')) ?? []
+    sellData: JSON.parse(localStorage.getItem('sellData')!) ?? []
 }
 
 const tableDataSlice = createSlice({
@@ -31,7 +37,7 @@ const tableDataSlice = createSlice({
             state.dataEdit = {...action.payload}
         },
 
-        editRow: (state = initialState, action) => {
+        editRow: (state , action) => {
             state.tableData = state.tableData.map((item) => {
                 if (item.key === state.dataEdit.key) {
                     return action.payload
@@ -43,13 +49,13 @@ const tableDataSlice = createSlice({
         sellItem: (state, action) => {
             state.tableData = state.tableData.map((item) => {
                 if (item.key === state.dataEdit.key) {
-                    return {...item, remains: +state.dataEdit?.remains - +action.payload?.remains,
+                    return {...item, remains: +state.dataEdit?.remains! - +action.payload?.remains,
                                     lastSale: fixDataValue(action.payload?.lastSale)}
                 }
                 return item
                 })
 
-            const zeroFilter = state.tableData.filter((e)=> (+e.remains > 0))
+            const zeroFilter = state.tableData.filter((e)=> (+e.remains! > 0))
             const hasSellItem = state.sellData?.filter((el) => el?.key === state.dataEdit?.key);
             const tableSellFix = state.sellData?.map(item => {
                 if (item?.key === state.dataEdit?.key) {

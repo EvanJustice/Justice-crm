@@ -1,21 +1,29 @@
 import styles from './SellModal.module.css'
-import {useEffect, useState} from "react";
-import {TextField} from "@mui/material";
-import {useDispatch, useSelector} from "react-redux";
-import {sellItem} from '../../app/tableDataSlice.js'
-import {toggleOpen} from "../../app/snackBarSlice.js";
+import React, {FC, useEffect, useState} from "react";
+import {TextField, useMediaQuery} from "@mui/material";
+import {sellItem} from '../../redux/tableDataSlice'
+import {toggleOpen, switchAction} from "../../redux/snackBarSlice";
+import {SellValueType, ShowSellModalType} from "../../types/MyTypes";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
 
-export const SellModal = ({ sellValue, setSellValue, show, setShow}) => {
-    const dataEdit = useSelector((state) => state.tableData.dataEdit)
-    const dispatch = useDispatch();
-    const [remainsFocus, setRemainsFocus] = useState(false);
-    const [lastSaleFocus, setLastSaleFocus] = useState(false);
-    const [zeroValue1, setZeroValue1] = useState('')
-    const [zeroValue2, setZeroValue2] = useState('')
-    const [errorRemains, setErrorRemains] = useState('')
-    const [errorLastSale, setErrorLastSale] = useState('')
+type SellModalProps ={
+    show: ShowSellModalType
+    setShow: ShowSellModalType
+    sellValue: SellValueType
+    setSellValue: SellValueType
+}
+export const SellModal: FC<SellModalProps> = ({ sellValue, setSellValue, show, setShow}) => {
+    const dataEdit = useAppSelector((state) => state.tableData.dataEdit)
+    const dispatch = useAppDispatch();
+    const [remainsFocus, setRemainsFocus] = useState<boolean>(false);
+    const [lastSaleFocus, setLastSaleFocus] = useState<boolean>(false);
+    const [zeroValue1, setZeroValue1] = useState<string>('')
+    const [zeroValue2, setZeroValue2] = useState<string>('')
+    const [errorRemains, setErrorRemains] = useState<string>('')
+    const [errorLastSale, setErrorLastSale] = useState<string>('')
+    const is720 = useMediaQuery('(min-width:800px)')
 
-    const blurHandler = (e) => {
+    const blurHandler = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
         switch (e.target.name) {
             case 'remains':
                 setRemainsFocus(true)
@@ -34,14 +42,14 @@ export const SellModal = ({ sellValue, setSellValue, show, setShow}) => {
         setErrorLastSale("")
         setShow(!show)
     }
-    const fixDataValue = (d) => {
+    const fixDataValue = (d:string) => {
         const year = d?.slice(0,4)
         const month = d?.slice(5,7)
         const day = d?.slice(8,10)
         return `${day}.${month}.${year}`
     }
 
-    const sellProduct = (e) => {
+    const sellProduct = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.preventDefault();
         if(!sellValue?.hasOwnProperty('remains')){
             setZeroValue1('введите количество товаров')
@@ -64,18 +72,18 @@ export const SellModal = ({ sellValue, setSellValue, show, setShow}) => {
             setErrorRemains("")
             setErrorLastSale("")
             setShow(!show);
+            dispatch(switchAction('sell'))
             dispatch(toggleOpen())}
-
     }
 
-    const onChangeRemains = (e) => {
+    const onChangeRemains = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setSellValue({...sellValue, [e.target.name]: e.target.value});
         if(!e.target.value || e.target.value.length < 1){
             setZeroValue1('введите количество товара')
         } else {
             setZeroValue1('')
         }
-        if(+e.target.value > +dataEdit.remains){
+        if(+e.target.value > +dataEdit.remains!){
             setErrorRemains('у вас нет столько товаров')
         } else if (+e.target.value < 1){
             setErrorRemains('так нельзя')
@@ -86,19 +94,19 @@ export const SellModal = ({ sellValue, setSellValue, show, setShow}) => {
     useEffect(() => {
         dateValidation(dataEdit?.creationDate, sellValue?.lastSale);
     },[sellValue?.lastSale, dataEdit?.creationDate])
-    const dateValidation = (createDate, saleDate) =>{
-        const dateIntegrator = (d) => {
+    const dateValidation = (createDate: string | undefined, saleDate: string | undefined) =>{
+        const dateIntegrator = (d:string):number => {
             const y = +d?.slice(6)
             const m = +d?.slice(3,5) * 0.1
             const day = +d?.slice(0,2) * 0.001
             return y + m + day
         }
-        if(dateIntegrator(fixDataValue(saleDate)) > dateIntegrator(createDate)
-            || dateIntegrator(fixDataValue(saleDate)) === dateIntegrator(createDate)){
+        if(dateIntegrator(fixDataValue(saleDate!)) > dateIntegrator(createDate!)
+            || dateIntegrator(fixDataValue(saleDate!)) === dateIntegrator(createDate!)){
             setErrorLastSale('')
         } else {
             setErrorLastSale('Вы не можете продать товар раньше его создания');
-            if(!dateIntegrator(fixDataValue(saleDate))){
+            if(!dateIntegrator(fixDataValue(saleDate!))){
                 setErrorLastSale("")
             }
         }
@@ -135,10 +143,11 @@ export const SellModal = ({ sellValue, setSellValue, show, setShow}) => {
                         variant='outlined'
                         name='remains'
                         label='Number of products'
-                        margin='normal'
+                        margin={is720 ? 'normal' : 'none'}
+                        size={is720 ? 'medium' : 'small'}
                         value={sellValue && sellValue?.remains ? sellValue?.remains : ''}
                         onChange={(e) => onChangeRemains(e)}
-                        onBlur={blurHandler}
+                        onBlur={()=> blurHandler}
                     />
                 </div>
                 <div className={styles.text_field}>
@@ -149,7 +158,8 @@ export const SellModal = ({ sellValue, setSellValue, show, setShow}) => {
                         helperText={zeroValue2 || errorLastSale}
                         variant='outlined'
                         name="lastSale"
-                        margin='normal'
+                        margin={is720 ? 'normal' : 'none'}
+                        size={is720 ? 'medium' : 'small'}
                         value={sellValue &&  sellValue?.lastSale ? sellValue?.lastSale : ''}
                         label='Date of sale'
                         onFocus={(e)=>blurHandler(e)}

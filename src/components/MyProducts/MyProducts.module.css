@@ -3,6 +3,16 @@
     background: #2B3844;
     border-radius: 3px;
 }
+.content{
+    position: relative;
+    padding: 0 50px;
+}
+.content_{
+    width: clamp(375px, 1187px, 1300px)
+}
+.edit:hover{
+    cursor: pointer;
+}
 .sell{
     width: 53px;
     height: 28px;
@@ -14,16 +24,44 @@
     color: #5382E7;
     cursor: pointer;
 }
+.sell:hover{
+    animation: rotate .3s 0s linear;
+}
+@keyframes rotate {
+    from{
+        transform: rotate(0);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+
+}
 .threebuttons {
+    position: relative;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     gap: 10px;
 }
+
 .delete{
     margin-left: 6px;
     cursor: pointer;
+}
+.delete:hover{
+    animation: delete .4s 0s 2 alternate  ;
+}
+@keyframes delete {
+    from {
+        border-radius: 3px;
+        transform: scale(1);
+    }
+    to {
+        transform: scale(2);
+
+
+    }
 }
 
 .row:nth-child(even){
@@ -33,9 +71,23 @@
 .row:nth-child(odd){
     background-color: #F8F8F8;
 }
-.test{
-    width: 50px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+
+@media (width < 1550px){
+    .content{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
+@media (width < 1300px){
+    .content_{
+        overflow-x: auto;
+    }
+}
+@media (width < 800px){
+    .content_{
+        padding-top: 150px;
+    }
+}
+
+
