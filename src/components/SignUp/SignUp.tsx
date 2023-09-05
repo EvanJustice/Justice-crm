@@ -1,6 +1,6 @@
 import styles from './Signup.module.css'
 
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     emailValidation,
     passwordValidation,
@@ -9,18 +9,19 @@ import {
     passwordCheck,
     nameInputs,
     inputs, lNameValidation
-} from "../../Validation functions/vFunc.ts";
+} from "../../Validation functions/vFunc";
 import {Link} from "react-router-dom";
 import {TextField} from "@mui/material";
-import {useDispatch, useSelector} from "react-redux";
-import {toggleAuth} from "../../redux/authSlice.ts";
-import {addUser} from "../../redux/usersSlice.ts";
+import {toggleAuth} from "../../redux/authSlice";
+import {addUser} from "../../redux/usersSlice";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
+import {IErrorsAndValues, IUser} from "../../types/MyTypes";
 
 export const SignUp = () => {
-    const dispatch = useDispatch()
-    const auth = useSelector((state) => state.auth)
-    const users = useSelector((state) => state.users)
-    const [values, setValues] = useState({
+    const dispatch = useAppDispatch()
+    const auth = useAppSelector((state) => state.auth)
+    const users = useAppSelector((state) => state.users)
+    const [values, setValues] = useState<IErrorsAndValues>({
             firstname: "",
             lastname: "",
             companyname: "",
@@ -30,13 +31,13 @@ export const SignUp = () => {
         }
     );
 
-    const [errors, setErrors] = useState({});
+    const [errors, setErrors] = useState<IErrorsAndValues>({});
 
     useEffect(() => {
             localStorage.setItem('users', JSON.stringify(users))
     },[users])
 
-    const onChange = (e) =>{
+    const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>{
         setValues({...values, [e.target.name]: e.target.value} );
         setErrors({
             ...errors,
@@ -44,7 +45,7 @@ export const SignUp = () => {
         })
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if(nameValidation(values, errors, setErrors) &&
             lNameValidation(values, errors, setErrors) &&
@@ -60,7 +61,7 @@ export const SignUp = () => {
                 alert('почта занята')
             } else {
                 dispatch(addUser(values))
-                const usersFromStorage = JSON.parse(localStorage.getItem('users'))
+                const usersFromStorage: IUser[] = JSON.parse(localStorage.getItem('users') ?? '')
                 const filterUsers = usersFromStorage.filter((el) => (
                     el.email === values.email && el.password === values.password
                 ))
@@ -84,12 +85,12 @@ export const SignUp = () => {
                             <div key={input.id} className={styles.content_}>
                                 <TextField
                                     key={input.id}
-                                    error={Boolean(errors[input?.name])}
-                                    helperText={errors[input?.name]}
+                                    error={Boolean(errors[input?.name as keyof object])}
+                                    helperText={errors[input?.name as keyof object]}
                                     margin="dense"
                                     fullWidth
                                     {...input}
-                                    value={values[input.name]}
+                                    value={values[input.name as keyof object]}
                                     onChange={(e) => onChange(e)}
                                 />
                             </div>
@@ -99,12 +100,12 @@ export const SignUp = () => {
                         <div key={input.id} className={styles.content__}>
                             <TextField
                                 key={input.id}
-                                error={Boolean(errors[input?.name])}
-                                helperText={errors[input?.name]}
+                                error={Boolean(errors[input?.name as keyof object])}
+                                helperText={errors[input?.name as keyof object]}
                                 margin="normal"
                                 fullWidth
                                 {...input}
-                                value={values[input.name]}
+                                value={values[input.name as keyof object]}
                                 onChange={onChange}
                             />
                         </div>

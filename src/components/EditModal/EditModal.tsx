@@ -1,15 +1,22 @@
 import styles from './EditModal.module.css'
-import {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {editRow, } from "../../redux/tableDataSlice";
+import React, {Dispatch, FC, SetStateAction, useEffect} from "react";
+import {editRow} from "../../redux/tableDataSlice";
 import {TextField, useMediaQuery} from "@mui/material";
 import {toggleOpen, switchAction} from "../../redux/snackBarSlice";
+import {InputDataType, TableDataType} from "../../types/MyTypes";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
 
-
-export const EditModal = ({value, setValue, show, setshow, input}) => {
-    const dataEdit = useSelector((state) => state.tableData.dataEdit);
-    const dispatch = useDispatch();
-    const is720 = useMediaQuery('(min-width:800px)')
+interface IEditModalProps {
+    value: TableDataType
+    setValue: Dispatch<SetStateAction<TableDataType>>
+    show: boolean
+    setshow: Dispatch<SetStateAction<boolean>>
+    input: InputDataType & TableDataType & TableDataType[]
+}
+export const EditModal: FC<IEditModalProps> = ({value, setValue, show, setshow, input}) => {
+    const dataEdit = useAppSelector((state) => state.tableData.dataEdit);
+    const dispatch = useAppDispatch();
+    const is720: boolean = useMediaQuery('(min-width:800px)')
 
     const clickXMark = () => {
         setshow(!show)
@@ -17,26 +24,26 @@ export const EditModal = ({value, setValue, show, setshow, input}) => {
     const updateState = () => {
         dispatch(editRow(value))
     };
-    const savingChanges = (e) => {
-        if(+value.remains >0 && +value.price >0 && +value.weight>0){
+    const savingChanges = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+            if(+value.remains! > 0 && +value.price! > 0 && +value.weight! > 0){
             e.preventDefault();
             updateState();
             setshow(!show)
             dispatch(switchAction('editProd'))
             dispatch(toggleOpen())
-
         }
     }
+
     useEffect(() => {
         if (dataEdit) {
             setValue({...dataEdit});
         }
     }, [dataEdit])
-     const onChange = (e) => {
+     const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setValue(dataEdit);
         setValue({...value, [e.target.name]: e.target.value});
     }
-    const clickOutside = (e) => {
+    const clickOutside = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         if(e.target === e.currentTarget) {
             setshow(!show)
         }
@@ -57,7 +64,7 @@ export const EditModal = ({value, setValue, show, setshow, input}) => {
                             name={el?.name}
                             onChange={(e) => onChange(e)}
                             label={el.placeholder}
-                            value={value ? value[el.name] : ''}
+                            value={value ? value[el.name as keyof typeof value] : ''}
                         />
                     ))
                 }

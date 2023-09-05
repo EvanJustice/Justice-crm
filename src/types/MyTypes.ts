@@ -1,4 +1,5 @@
 import {Dispatch, SetStateAction} from "react";
+import {AlertColor} from "@mui/material";
 
 export type InputDataType = {
     key: number
@@ -7,16 +8,7 @@ export type InputDataType = {
     name: string
     focus: boolean
 }
-export type ModalType ={
-    modal: boolean
-    setModal: Dispatch<SetStateAction<boolean>>
-}
-export type SellValueType = {
-    sellValue: {
-        [key: string]: number | null
-    }
-    setSellValue: Dispatch<SetStateAction<{[key: string]: number | null} | null>>
-}
+
 export type TableDataType = {
     address?: string
     category?: string
@@ -28,8 +20,67 @@ export type TableDataType = {
     remains?: number | string
     store?: string
     weight?: string
+} & InputDataType
+
+export type SellValue={
+    remains?: string | number
+    lastSale?: string | number
+} | null
+export interface IsellValue{
+    sellValue: SellValue
+    setSellValue: Dispatch<SetStateAction<SellValue | null >>
 }
-export type ShowSellModalType = {
-    showSellModal: boolean
-    setShowSellModal: Dispatch<SetStateAction<boolean>>
+export interface IUser{
+    address: string
+    companyname: string
+    email: string
+    firstname: string
+    id: number
+    lastname: string
+    password: string
 }
+export interface IErrors {
+    email: string
+    password: string
+}
+
+export interface IInputs {
+    name: string
+    label: string
+    defaultValue?: string
+    type: string
+    classname: string
+}
+export interface ISnackBar {
+    isOpen: boolean,
+    alert: {
+        action: null,
+        text: {
+            created: string,
+            edited: {
+                product: string,
+                profile: string,
+                password: string
+            },
+            sold: string,
+            deleted: string},
+        severity: {
+            error:  AlertColor,
+            warning:  AlertColor,
+            info:  AlertColor,
+            success:  AlertColor
+        }
+    }
+}
+
+export interface IErrorsAndValues{
+    address?: string
+    companyname?: string
+    email?: string
+    firstname?: string
+    lastname?: string
+    oldpassword?: string
+    password?: string
+    confirmpassword?: string
+}
+

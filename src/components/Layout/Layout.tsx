@@ -12,6 +12,7 @@ import {ModalProduct} from "../ModalProduct/ModalProduct.js";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
 import {toggleAuth} from "../../redux/authSlice.js";
 import {SnackBar} from "../SnackBar/SnackBar.js";
+import {InputDataType} from "../../types/MyTypes";
 
 
 type LinksArray = {
@@ -48,13 +49,7 @@ const linksArray:LinksArray = [
 type LayoutProps = {
     modal: boolean
     setModal: Dispatch<SetStateAction<boolean>>
-    data: {
-        key: number
-        placeholder: string
-        value: string
-        name: string
-        focus: boolean
-}[]
+    data: InputDataType[]
 }
 export const Layout: FC<LayoutProps> = ({modal, setModal, data}) => {
 
@@ -100,7 +95,6 @@ export const Layout: FC<LayoutProps> = ({modal, setModal, data}) => {
     }
 
     const logout = ():void => {
-        console.log('click logout')
         localStorage.removeItem("tableData")
         localStorage.removeItem("sellData")
         localStorage.removeItem("userID")

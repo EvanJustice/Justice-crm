@@ -1,11 +1,16 @@
 import styles from './ModalDelete.module.css'
-import {deleteRow} from "../../redux/tableDataSlice.ts";
-import {useDispatch, useSelector} from "react-redux";
-import {switchAction, toggleOpen} from "../../redux/snackBarSlice.ts";
+import {deleteRow} from "../../redux/tableDataSlice";
+import {switchAction, toggleOpen} from "../../redux/snackBarSlice";
+import {Dispatch, FC, SetStateAction} from "react";
+import {useAppDispatch} from "../../../hooks";
 
-export const ModalDelete = ({ elKey, active, setActive}) => {
-    const dispatch = useDispatch()
-    const action = useSelector((state) => state.snackBar.alert.action)
+interface IModalDeleteProps {
+    elKey: number | null
+    active: boolean
+    setActive: Dispatch<SetStateAction<boolean>>
+}
+export const ModalDelete: FC<IModalDeleteProps> = ({ elKey, active, setActive}) => {
+    const dispatch = useAppDispatch()
     const deleteItem = () =>{
         dispatch(switchAction('delete'))
         dispatch(deleteRow(elKey))

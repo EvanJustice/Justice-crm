@@ -5,10 +5,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import styles from "../MyProducts/MyProducts.module.css";
-import {useSelector} from "react-redux";
+import {useAppSelector} from "../../../hooks";
 
 export const MySales = () =>{
-    const sellData = useSelector((state) => state.tableData.sellData)
+    const sellData = useAppSelector((state) => state.tableData.sellData)
 const cells = [
     'Product Name',
     'Store',

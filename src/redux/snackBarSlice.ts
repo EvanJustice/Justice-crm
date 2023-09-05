@@ -1,6 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
+import {ISnackBar} from "../types/MyTypes";
 
-const initialState = {
+const initialState:ISnackBar = {
     isOpen: false,
     alert: {
         action: null,
@@ -27,7 +28,7 @@ const snackBarSlice = createSlice({
     initialState,
     reducers:{
         toggleOpen: (state) => {
-            const a = (a) => !a
+            const a = (a: boolean) => !a
             return {...state,
                 isOpen: a(state.isOpen)
             }

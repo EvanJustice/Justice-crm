@@ -1,7 +1,9 @@
-const userID = JSON.parse(localStorage.getItem('userID'))
-const usersArray = JSON.parse(localStorage.getItem('users'))
+import {IUser, IInputs} from "../../types/MyTypes";
+
+const userID = JSON.parse(localStorage.getItem('userID')??"")
+const usersArray: IUser[] = JSON.parse(localStorage.getItem('users')??"")
 export const currentUser = usersArray?.filter((el)=> (el?.id === userID))[0]
-export const inputs = [
+export const inputs: IInputs[] = [
     {   name: 'firstname',
         label: 'First name',
         defaultValue: currentUser?.firstname ?? '',

@@ -1,21 +1,25 @@
 import styles from './ModalProduct.module.css'
 import {ReactComponent as Plus} from "../../assets/Plus.svg";
-import React, {ChangeEvent, FC, MouseEventHandler, useState} from "react";
+import React, {ChangeEvent, Dispatch, FC, SetStateAction, useState} from "react";
 import {TextField, useMediaQuery} from "@mui/material";
 import {useAppDispatch} from "../../../hooks";
-import {addRow} from "../../redux/tableDataSlice";
+import{addRow} from "../../redux/tableDataSlice";
 import {toggleOpen, switchAction} from "../../redux/snackBarSlice";
-import {TypeModal, TypeInputData} from "../../types/MyTypes";
+import {InputDataType, TableDataType} from "../../types/MyTypes";
 
 
-type ModalProps = { data: TypeInputData[] } & TypeModal
+type ModalProps = {
+    data: InputDataType[]
+    modal: boolean
+    setModal: Dispatch<SetStateAction<boolean>>
+}
 export const ModalProduct:FC<ModalProps> = ({modal, setModal, data}) => {
 
     const dispatch = useAppDispatch()
 
-    type ValueType ={
+    type ValueType = {
         name?: string
-    }
+    } & TableDataType | {}
     const [value, setValue] = useState<ValueType | null>({});
     const [error, setError] = useState<{}>({})
     const [focus, setFocus] = useState<boolean>(false)
@@ -57,7 +61,7 @@ export const ModalProduct:FC<ModalProps> = ({modal, setModal, data}) => {
             setFocus(true)
             if (Object.keys(finalErrors).length === 0) {
                 dispatch(switchAction('create'))
-                dispatch(addRow(value));
+                dispatch(addRow(value as TableDataType));
                 setFocus(false);
                 setModal(!modal);
                 setValue(null);

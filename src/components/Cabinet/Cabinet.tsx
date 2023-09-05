@@ -1,38 +1,38 @@
 import styles from './Cabinet.module.css'
 import {TextField} from "@mui/material";
 import {inputs} from "./index.js";
-import { useState} from "react";
-import {emailValidation, passwordValidation} from '../../Validation functions/vFunc.ts'
-import {useDispatch, useSelector} from "react-redux";
-import {switchAction, toggleOpen} from "../../redux/snackBarSlice.ts";
+import {ChangeEvent, useState} from "react";
+import {emailValidation, passwordValidation} from '../../Validation functions/vFunc'
+import {switchAction, toggleOpen} from "../../redux/snackBarSlice";
+import {useAppDispatch} from "../../../hooks";
+import {IUser, IErrorsAndValues} from '../../types/MyTypes'
+
 
 
 export const Cabinet = () =>{
-    const text = useSelector((state) => state.snackBar.alert.text)
-    const severity = useSelector((state)=> state.snackBar.alert.severity)
-    const color = useSelector((state) => state.snackBar.alert.color)
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
     const myObj = inputs.reduce((acc, el) => {
         return {...acc, [el.name]: el.defaultValue}
     }, {})
-    const[errors, setErrors] = useState({})
-    const[values, setValues] = useState(myObj)
-    const[isDisabled, setIsDisabled] = useState(true)
+    const[errors, setErrors] = useState<IErrorsAndValues>({})
+    const[values, setValues] = useState<IErrorsAndValues>(myObj)
+    const[isDisabled, setIsDisabled] = useState<boolean>(true)
 
     const onSubmit = () => {
-        const userID = JSON.parse(localStorage.getItem('userID'))
-        const usersArray = JSON.parse(localStorage.getItem('users'))
+        const userID: number = JSON.parse(localStorage.getItem('userID') ?? "")
+        const usersArray: IUser[]  = JSON.parse(localStorage.getItem('users') ?? "")
         const currentUser = usersArray.filter((el)=> (el.id === userID))[0]
-        const newValues = (values) =>{
+
+        const newValues = (values: IErrorsAndValues) =>{
             const val = {...values}
             delete val.password
             delete val.oldpassword
             return val
         }
 
-        const checkLength = (obj) => {
+        const checkLength = (obj: IErrorsAndValues) => {
             for(const key in obj){
-                    if(obj[key].length >= 3){
+                    if(obj[key as keyof typeof obj]!.length >= 3){
                         setErrors((prev) =>({...prev,  [`${key}`]: ''}))
                 }
                  else {
@@ -73,7 +73,8 @@ export const Cabinet = () =>{
                             let newCurrentUser;
                             newCurrentUser = {...obj, ...values};
                             delete newCurrentUser.oldpassword
-                            delete newCurrentUser.confirmpassword
+                            if(newCurrentUser.confirmpassword){
+                                delete newCurrentUser.confirmpassword}
                             return newCurrentUser
                         }
                         return obj
@@ -88,7 +89,7 @@ export const Cabinet = () =>{
         }
     }
 
-    const onChange = (e) => {
+    const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setValues((prevState) =>  ({...prevState, [e.target.name]: e.target.value}))
         setErrors((prevState) =>  ({...prevState, [e.target.name]: ''}))
         setIsDisabled(false)
@@ -103,12 +104,12 @@ export const Cabinet = () =>{
                             size='small'
                             key={index}
                             type={el.type}
-                            error={Boolean(errors[el?.name])}
-                            helperText={errors[el?.name]}
+                            error={Boolean(errors[el?.name as keyof typeof errors])}
+                            helperText={errors[el?.name as keyof typeof errors]}
                             name={el.name}
                             label={el.label}
                             className={styles[el.classname]}
-                            value={values[el.name]}
+                            value={values[el.name as keyof typeof values]}
                             onChange={(e) => onChange(e)}
                         />
                     ))

@@ -1,34 +1,38 @@
 import styles from './Signin.module.css'
-import {useState} from "react";
-import {emailValidation, passwordValidation, inputes} from "../../Validation functions/vFunc.ts";
+import React, {useState} from "react";
+import {emailValidation, passwordValidation, inputes} from "../../Validation functions/vFunc";
 import {Link} from "react-router-dom";
 import {TextField} from "@mui/material";
-import {useDispatch, useSelector} from "react-redux";
-import {toggleAuth} from "../../redux/authSlice.ts";
+
+import {toggleAuth} from "../../redux/authSlice";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
+import {IErrors, IUser} from "../../types/MyTypes";
 
 export const SignIn = () => {
-    const auth = useSelector((state) => state.auth)
-    const dispatch = useDispatch()
-    const [values, setValues] = useState({
-        email:"",
-        password:"",
-    });
-    const [errors, setErrors] = useState({
+    const auth = useAppSelector((state) => state.auth)
+    const dispatch = useAppDispatch()
+    const [values, setValues] = useState<IErrors>({
         email:"",
         password:"",
     });
 
-    const onChange = (e) =>{
+    const [errors, setErrors] = useState<IErrors>({
+        email:"",
+        password:"",
+    });
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>{
         setValues({...values, [e.target.name]: e.target.value} );
         setErrors({
             ...errors,
             [e.target.name]: '',
         })
     };
-    const handleSubmit = (e) => {
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (emailValidation(values, errors, setErrors) && passwordValidation(values, errors, setErrors)) {
-            const usersFromStorage = JSON.parse(localStorage.getItem('users'))
+            const usersFromStorage: IUser[] = JSON.parse(localStorage.getItem('users') ?? '')
             const filterUsers = usersFromStorage.filter((el) => (
                 el.email === values.email && el.password === values.password
             ))
@@ -51,11 +55,11 @@ export const SignIn = () => {
                                 <TextField
                                         key={`${input?.id}-${key}`}
                                         {...input}
-                                        error={Boolean(errors[input?.name])}
-                                        helperText={errors[input.name]}
+                                        error={Boolean(errors[input?.name as keyof object])}
+                                        helperText={errors[input.name as keyof object]}
                                         margin='normal'
                                         fullWidth
-                                        value={values[input.name]}
+                                        value={values[input.name as keyof object]}
                                         onChange={(e) => onChange(e)}
                                     />
                             </div>

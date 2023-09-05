@@ -1,21 +1,35 @@
 import { PieChart, Pie, Cell, Tooltip } from "recharts";
 import {Box, Stack, Typography} from "@mui/material";
-import {useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import styles from './Charts.module.css'
+import {useAppSelector} from "../../../../hooks";
 
 export const MyPieChart= () => {
-    const [goods, setGoods] = useState([])
-    const sellData = useSelector((state) => state.tableData.sellData)
-    const randomColor = () =>{
+    const [goods, setGoods] = useState<string[] | undefined>([])
+    const sellData = useAppSelector((state) => state.tableData.sellData)
+    const randomColor = (): string =>{
         let a;
         a = '#'+(Math.random().toString(16)+'00000').slice(2,8)
        return a
     }
-    const myData = sellData.map((el) => {return {name: el.store + ' ' + el.productName, goods: +el.remains, color: randomColor()} })
+
+    type PieData = {
+        name?: string
+        goods?: number
+        color?: string
+    } | undefined
+
+    const myData: PieData[] = sellData.map((el) => {
+        if(el.remains)
+        return {
+            name: el.store + ' ' + el.productName,
+            goods: +el.remains,
+            color: randomColor()
+        }
+    })
 
     useEffect(()=>{
-        setGoods(myData.map((el) => el.name))
+        setGoods(myData.map((el) => el!.name as string ))
     },[sellData])
 
     return (
@@ -32,7 +46,7 @@ export const MyPieChart= () => {
                         dataKey="goods"
                     >
                         {myData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
+                            <Cell key={`cell-${index}`} fill={entry!.color} />
                         ))}
                     </Pie>
                     <Tooltip />
@@ -41,15 +55,15 @@ export const MyPieChart= () => {
                 <Stack marginTop={4} gap={2}>
                    <Box >
                        {myData.map((el,i)=>(
-                               <div key={el.color} className={styles.content_pie}>
-                                   <Stack key={el.color}
+                               <div key={el!.color} className={styles.content_pie}>
+                                   <Stack key={el!.color}
                                           display='flex'
                                           flexDirection='row'
                                           gap='4px'
                                           alignItems='center'
                                           spacing={1}>
-                                       <Box sx={{background:el.color, width:10, borderRadius:50, height:10}}/>
-                                       <Typography className={styles.typo_pie} >{goods[i]}</Typography>
+                                       <Box sx={{background:el!.color, width:10, borderRadius:50, height:10}}/>
+                                       <Typography className={styles.typo_pie} >{goods![i]}</Typography>
                                    </Stack>
                                    <hr style={{width:'calc(inherit + 30px)'}}/>
                                </div>

@@ -13,7 +13,7 @@ export const productDate = (t = new Date()):string => {
     const d = dateCorrector(t.getDate())
     return `${d}.${m}.${y}`
 }
-export const fixDataValue = (d:string) => {
+export const fixDataValue = (d:string | undefined ) => {
     const year = d?.slice(0,4)
     const month = d?.slice(5,7)
     const day = d?.slice(8,10)

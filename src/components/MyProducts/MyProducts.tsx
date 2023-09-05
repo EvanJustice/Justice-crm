@@ -13,11 +13,13 @@ import {SellModal} from "../SellModal/SellModal.js";
 import {takeTableData} from "../../redux/tableDataSlice";
 import {SnackBar} from "../SnackBar/SnackBar.js";
 import {ModalDelete} from "../ModalDelete/ModalDelete";
-import {TableDataType, TypeInputData, TypeSellValue} from "../../types/MyTypes";
+import {IsellValue, TableDataType} from "../../types/MyTypes";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
 
-type TypeMyProductsProps = {inputstate: TypeInputData[]} & TypeSellValue
-export const MyProducts: FC<TypeMyProductsProps> = ({inputstate, sellValue, setSellValue}) =>{
+interface IProductsProps extends IsellValue{
+    inputstate: TableDataType
+}
+export const MyProducts: FC<IProductsProps> = ({inputstate, sellValue, setSellValue}) =>{
     const [showModal, setShowModal] = useState<boolean>(false);
     const [showSellModal, setShowSellModal] = useState<boolean>(false);
     const tableData = useAppSelector((state) => state.tableData.tableData)
@@ -25,7 +27,7 @@ export const MyProducts: FC<TypeMyProductsProps> = ({inputstate, sellValue, setS
     const [delModalActive, setDelModalActive] = useState<boolean>(false)
     const [elKey, setElKey] = useState<number | null>(null)
     const dataEdit = useAppSelector((state) => state.tableData.dataEdit);
-    const [value, setValue] = useState(dataEdit)
+    const [value, setValue] = useState<TableDataType>(dataEdit)
 
     const showEditForm = (item:TableDataType) => {
         dispatch(takeTableData(item));
@@ -51,10 +53,7 @@ export const MyProducts: FC<TypeMyProductsProps> = ({inputstate, sellValue, setS
     return (
         <div className={styles.content}>
             <div className={styles.content_}>
-                <SnackBar
-                    // text={color === 'green' ? text.sold : color === 'blue' ? text.edited.product : color ==='red' ? text.deleted : text.created}
-                    // severity={ color === 'green'  ? severity.success : color === 'blue' ? severity.info : color === 'red' ? severity.warning : severity.success}
-                    />
+                <SnackBar />
                 <TableContainer >
                     <Table >
                         <TableHead >
@@ -85,7 +84,9 @@ export const MyProducts: FC<TypeMyProductsProps> = ({inputstate, sellValue, setS
                                                     </div>
                                                     <Edit className={styles.edit} onClick={() => showEditForm(el)}/>
                                                     <div onClick={() => {
-                                                        setElKey(el.key!)
+                                                        if(el.key){
+                                                            setElKey(el.key)
+                                                        }
                                                         setDelModalActive(true)
                                                     }} className={styles.delete}>
                                                         <Delete/>
@@ -104,7 +105,7 @@ export const MyProducts: FC<TypeMyProductsProps> = ({inputstate, sellValue, setS
                     setValue={setValue}
                     show={showModal}
                     setshow={setShowModal}
-                    input={inputstate}
+                    input={inputstate as any}
                 />
                 <SellModal
                     sellValue={sellValue}

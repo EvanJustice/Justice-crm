@@ -1,18 +1,15 @@
 import styles from './SellModal.module.css'
-import React, {FC, useEffect, useState} from "react";
+import React, {ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState} from "react";
 import {TextField, useMediaQuery} from "@mui/material";
 import {sellItem} from '../../redux/tableDataSlice'
 import {toggleOpen, switchAction} from "../../redux/snackBarSlice";
-import {SellValueType, ShowSellModalType} from "../../types/MyTypes";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
-
-type SellModalProps ={
-    show: ShowSellModalType
-    setShow: ShowSellModalType
-    sellValue: SellValueType
-    setSellValue: SellValueType
+import {IsellValue} from "../../types/MyTypes";
+interface ISellModalProps extends IsellValue{
+    show?: boolean
+    setShow: Dispatch<SetStateAction<boolean>>
 }
-export const SellModal: FC<SellModalProps> = ({ sellValue, setSellValue, show, setShow}) => {
+export const SellModal: FC<ISellModalProps> = ({ sellValue, setSellValue, show, setShow}) => {
     const dataEdit = useAppSelector((state) => state.tableData.dataEdit)
     const dispatch = useAppDispatch();
     const [remainsFocus, setRemainsFocus] = useState<boolean>(false);
@@ -92,7 +89,7 @@ export const SellModal: FC<SellModalProps> = ({ sellValue, setSellValue, show, s
         }
     }
     useEffect(() => {
-        dateValidation(dataEdit?.creationDate, sellValue?.lastSale);
+        dateValidation(dataEdit?.creationDate, sellValue?.lastSale as string);
     },[sellValue?.lastSale, dataEdit?.creationDate])
     const dateValidation = (createDate: string | undefined, saleDate: string | undefined) =>{
         const dateIntegrator = (d:string):number => {
@@ -111,7 +108,7 @@ export const SellModal: FC<SellModalProps> = ({ sellValue, setSellValue, show, s
             }
         }
     }
-    const onChangeLastSale = (e) => {
+    const onChangeLastSale = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setSellValue({...sellValue, [e.target.name]: e.target.value});
         if(!e.target.value){
             setZeroValue2('введите дату')
@@ -119,7 +116,7 @@ export const SellModal: FC<SellModalProps> = ({ sellValue, setSellValue, show, s
             setZeroValue2('')
         }
     }
-    const clickOutside = (e) => {
+    const clickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
         if(e.target === e.currentTarget){
             setSellValue(null)
             setZeroValue1("")

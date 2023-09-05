@@ -1,16 +1,16 @@
 import Snackbar from '@mui/material/Snackbar';
 import {Alert, Slide, useMediaQuery} from "@mui/material";
-import {useDispatch, useSelector} from "react-redux";
-import {toggleOpen} from "../../redux/snackBarSlice.ts";
+import {toggleOpen} from "../../redux/snackBarSlice";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
 
 
 export const SnackBar = () =>{
-    const open = useSelector((state)=> state.snackBar.isOpen)
+    const open = useAppSelector((state)=> state.snackBar.isOpen)
     const is720 = useMediaQuery('(min-width:720px)')
-    const dispatch = useDispatch()
-    const text = useSelector((state) => state.snackBar.alert.text)
-    const severity = useSelector((state)=> state.snackBar.alert.severity)
-    const action = useSelector((state) => state.snackBar.alert.action)
+    const dispatch = useAppDispatch()
+    const text = useAppSelector((state) => state.snackBar.alert.text)
+    const severity = useAppSelector((state)=> state.snackBar.alert.severity)
+    const action = useAppSelector((state) => state.snackBar.alert.action)
     const handleClose = () => {
         if(open === true){
             dispatch(toggleOpen())
@@ -28,7 +28,7 @@ export const SnackBar = () =>{
                       sx={ is720 ? null : {marginTop: '130px'}}
                       >
                 <Alert  severity={action === 'editProf' ?
-                    severity.info : action === 'editProd' ?
+                        severity.info : action === 'editProd' ?
                         severity.info : action === 'editPass'?
                         severity.warning : action === 'delete'?
                             severity.warning : action === 'create' ?

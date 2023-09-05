@@ -1,30 +1,30 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { productDate, fixDataValue } from './functions'
 import {currentUser} from "../components/Cabinet";
-import {TableDataType} from "../types/MyTypes";
+import {IErrorsAndValues, SellValue, TableDataType} from "../types/MyTypes";
 
 type InitStateType = {
     tableData: TableDataType[]
     dataEdit: TableDataType
     sellData: TableDataType[]
 }
+
 const initialState: InitStateType ={
-    tableData: JSON.parse(localStorage.getItem('tableData')!) ?? [],
-    dataEdit: {},
-    sellData: JSON.parse(localStorage.getItem('sellData')!) ?? []
+    tableData: JSON.parse(localStorage.getItem('tableData') ?? "") ?? [],
+    dataEdit: {} as TableDataType,
+    sellData: JSON.parse(localStorage.getItem('sellData') ?? "") ?? []
 }
 
 const tableDataSlice = createSlice({
     name: 'tableData',
     initialState,
     reducers: {
-        deleteRow: (state, action) => {
-
+        deleteRow: (state, action: PayloadAction<number | null>) => {
             state.tableData = state.tableData.filter((el) => el.key !== action.payload);
             localStorage.setItem("tableData", JSON.stringify(state.tableData));
             },
 
-        addRow: (state= initialState, action) => {
+        addRow: (state= initialState, action: PayloadAction<TableDataType>) => {
              state?.tableData?.unshift({...action.payload,
                      key: (new Date).getTime(),
                      address: currentUser.address,
@@ -33,11 +33,11 @@ const tableDataSlice = createSlice({
             localStorage.setItem("tableData", JSON.stringify(state.tableData));
         },
 
-        takeTableData: (state , action) => {
+        takeTableData: (state , action: PayloadAction<TableDataType>) => {
             state.dataEdit = {...action.payload}
         },
 
-        editRow: (state , action) => {
+        editRow: (state , action: PayloadAction<TableDataType>) => {
             state.tableData = state.tableData.map((item) => {
                 if (item.key === state.dataEdit.key) {
                     return action.payload
@@ -46,11 +46,13 @@ const tableDataSlice = createSlice({
             })
             localStorage.setItem("tableData", JSON.stringify(state.tableData));
     },
-        sellItem: (state, action) => {
+        sellItem: (state, action: PayloadAction<SellValue>) => {
             state.tableData = state.tableData.map((item) => {
                 if (item.key === state.dataEdit.key) {
-                    return {...item, remains: +state.dataEdit?.remains! - +action.payload?.remains,
-                                    lastSale: fixDataValue(action.payload?.lastSale)}
+                    if(action.payload!.remains && action.payload!.lastSale){
+                        return {...item, remains: +state.dataEdit?.remains! - +action.payload!.remains,
+                        lastSale: fixDataValue(action.payload!.lastSale as string)}
+                    }
                 }
                 return item
                 })
@@ -62,7 +64,7 @@ const tableDataSlice = createSlice({
                     return {
                         ...state.dataEdit,
                         remains: Number(item?.remains) + Number(action.payload?.remains),
-                        lastSale: fixDataValue(action.payload?.lastSale)}
+                        lastSale: fixDataValue(action.payload!.lastSale as string)}
                 }
                 return item;
             });
@@ -72,8 +74,8 @@ const tableDataSlice = createSlice({
                 ? tableSellFix
                 : [{
                     ...state.dataEdit,
-                    remains: `${action.payload.remains}`,
-                    lastSale: fixDataValue(action.payload?.lastSale)
+                    remains: `${action.payload!.remains}`,
+                    lastSale: fixDataValue(action.payload?.lastSale as string)
                 },
                     ...state.sellData
                 ];

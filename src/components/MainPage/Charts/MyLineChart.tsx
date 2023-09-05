@@ -6,14 +6,20 @@ import {
     YAxis,
     CartesianGrid,
     Tooltip,
-    ResponsiveContainer
 } from "recharts";
 import {Typography} from "@mui/material";
-import {useSelector} from "react-redux";
+import {useAppSelector} from "../../../../hooks";
 
 export const MyLineChart = () => {
-    const sellData = useSelector((state) => state.tableData.sellData)
-    const myData = sellData.map((el) => {return {name: el.store + ' ' + el.productName, money: (+el.remains * +el.price), } })
+    const sellData = useAppSelector((state) => state.tableData.sellData)
+    const myData = sellData.map((el) => {
+        if (el.remains && el.price){
+                return {
+                name: el.store + ' ' + el.productName,
+                money: (+el.remains * +el.price),
+            }
+        }
+    })
 
 
     return(
@@ -43,7 +49,7 @@ export const MyLineChart = () => {
                     activeDot={{ r: 5 }}
                 />
             </LineChart>
-            <Typography>${myData.reduce((a, b) =>  a + b.money, 0)}</Typography>
+            <Typography>${myData.reduce((a, b) =>a + b!.money, 0)}</Typography>
         </div>
     )
 }

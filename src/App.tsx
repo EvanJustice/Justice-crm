@@ -9,7 +9,7 @@ import {Routes, Route, Navigate} from "react-router-dom";
 import {ModalProduct} from "./components/ModalProduct/ModalProduct";
 import React, {useEffect, useState} from "react";
 import { useAppSelector } from "../hooks";
-import {InputDataType} from "./types/MyTypes";
+import {InputDataType, SellValue, TableDataType} from "./types/MyTypes";
 
 const inputData = [
     {key: 1, placeholder: 'Store', value:'', name:'store', focus: false},
@@ -20,9 +20,9 @@ const inputData = [
     {key: 6, placeholder: 'Weight/Volume of one item', value:'', name:'weight', focus: false}
 ]
 export const App = () => {
-    const[inputState, setInputState] = useState<InputDataType[]>(inputData)
+    const[inputState, setInputState] = useState<TableDataType[] | InputDataType>(inputData)
     const [showModal, setShowModal] = useState<boolean>(false);
-    const [sellValue, setSellValue] = useState<{name: number} | null>(null);
+    const [sellValue, setSellValue] = useState<SellValue>(null);
     const auth = useAppSelector((state) => state.auth)
 
     useEffect(() => {
@@ -42,7 +42,7 @@ export const App = () => {
                     <Layout
                         modal={showModal}
                         setModal={setShowModal}
-                        data={inputState}
+                        data={inputState as InputDataType[]}
                     />
                 }>
                     <Route index element={<MainPage  />} />
@@ -53,7 +53,7 @@ export const App = () => {
                         <MyProducts
                             sellValue={sellValue}
                             setSellValue={setSellValue}
-                            inputstate={inputState}
+                            inputstate={inputState as TableDataType}
                         />
                     }/>
                     <Route path="*" element={<Navigate to='/' replace />} />
