@@ -1,7 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { productDate, fixDataValue } from './functions'
 import {currentUser} from "../components/Cabinet";
-import {IErrorsAndValues, SellValue, TableDataType} from "../types/MyTypes";
+import {SellValue, TableDataType} from "../types/MyTypes";
 
 type InitStateType = {
     tableData: TableDataType[]
