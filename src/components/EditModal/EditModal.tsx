@@ -25,12 +25,14 @@ export const EditModal: FC<IEditModalProps> = ({value, setValue, show, setshow, 
         dispatch(editRow(value))
     };
     const savingChanges = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-            if(+value.remains! > 0 && +value.price! > 0 && +value.weight! > 0){
-            e.preventDefault();
-            updateState();
-            setshow(!show)
-            dispatch(switchAction('editProd'))
-            dispatch(toggleOpen())
+        if(value.remains && value.price && value.weight ){
+            if(+value.remains > 0 && +value.price > 0 && +value.weight > 0){
+                e.preventDefault();
+                updateState();
+                setshow(!show)
+                dispatch(switchAction('editProd'))
+                dispatch(toggleOpen())
+            }
         }
     }
 

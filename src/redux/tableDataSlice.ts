@@ -3,16 +3,16 @@ import { productDate, fixDataValue } from './functions'
 import {currentUser} from "../components/Cabinet";
 import {SellValue, TableDataType} from "../types/MyTypes";
 
-type InitStateType = {
+type InitState = {
     tableData: TableDataType[]
     dataEdit: TableDataType
     sellData: TableDataType[]
 }
 
-const initialState: InitStateType ={
-    tableData: JSON.parse(localStorage.getItem('tableData') ?? "") ?? [],
+const initialState: InitState ={
+    tableData: JSON.parse(localStorage.getItem('tableData') ?? '[]'),
     dataEdit: {} as TableDataType,
-    sellData: JSON.parse(localStorage.getItem('sellData') ?? "") ?? []
+    sellData: JSON.parse(localStorage.getItem('sellData') ?? '[]')
 }
 
 const tableDataSlice = createSlice({

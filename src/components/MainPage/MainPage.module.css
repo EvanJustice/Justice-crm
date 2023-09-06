@@ -2,6 +2,13 @@
 .content{
     display: flex;
     justify-content: center;
+    width: 1300px;
+    margin-top: 20px;
+    padding: 0 50px;
+}
+.content_{
+    display: flex;
+    justify-content: center;
     width: 100%;
     margin-top: 20px;
     padding: 0 50px;
@@ -14,6 +21,9 @@
 
 @media (width < 1300px) {
     .content{
+        width: 100%;
+    }
+    .content_{
         align-items: center;
         flex-direction: column;
         height: max-content;
@@ -36,7 +46,7 @@
         flex-direction: column;
         height: 100%;
     }
-    .content{
+    .content_{
         margin-top: 150px;
     }
 }

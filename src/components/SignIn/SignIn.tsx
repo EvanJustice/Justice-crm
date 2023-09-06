@@ -6,17 +6,17 @@ import {TextField} from "@mui/material";
 
 import {toggleAuth} from "../../redux/authSlice";
 import {useAppDispatch, useAppSelector} from "../../../hooks";
-import {IErrors, IUser} from "../../types/MyTypes";
+import {IErrorsAndValues, IUser} from "../../types/MyTypes";
 
 export const SignIn = () => {
     const auth = useAppSelector((state) => state.auth)
     const dispatch = useAppDispatch()
-    const [values, setValues] = useState<IErrors>({
+    const [values, setValues] = useState<IErrorsAndValues>({
         email:"",
         password:"",
     });
 
-    const [errors, setErrors] = useState<IErrors>({
+    const [errors, setErrors] = useState<IErrorsAndValues>({
         email:"",
         password:"",
     });

@@ -1,6 +1,13 @@
-export const nameValidation = (values, errors, setErrors) => {
+import {IErrorsAndValues} from "../types/MyTypes";
+import {Dispatch, SetStateAction} from "react";
+
+export const nameValidation = (
+    values: IErrorsAndValues,
+    errors: IErrorsAndValues,
+    setErrors: Dispatch<SetStateAction<IErrorsAndValues>>
+) => {
     const reg = /^[A-Za-z_ ]{3,}$/
-    if(!values.firstname.match(reg)){
+    if(!values.firstname?.match(reg)){
         setErrors((prevState) => ({
             ...prevState,
             firstname: "Only English letters and spaces!(min 3characters)",
@@ -14,9 +21,13 @@ export const nameValidation = (values, errors, setErrors) => {
         return true
     }
 }
-export const lNameValidation = (values, errors, setErrors) => {
+export const lNameValidation = (
+    values: IErrorsAndValues,
+    errors: IErrorsAndValues,
+    setErrors: Dispatch<SetStateAction<IErrorsAndValues>>
+) => {
     const reg = /^[A-Za-z_ ]{3,}$/
-    if(!values.lastname.match(reg)){
+    if(!values.lastname?.match(reg)){
         setErrors((prevState) => ({
             ...prevState,
             lastname: "Only English letters and spaces!(min 3characters)",
@@ -30,9 +41,13 @@ export const lNameValidation = (values, errors, setErrors) => {
         return true
     }
 }
-export const companyValidation = (values, errors, setErrors) => {
+export const companyValidation = (
+    values: IErrorsAndValues,
+    errors: IErrorsAndValues,
+    setErrors: Dispatch<SetStateAction<IErrorsAndValues>>
+) => {
     const reg = /^[A-Za-z_ ]{3,}$/
-    if(!values.companyname.match(reg)){
+    if(!values.companyname?.match(reg)){
         setErrors((prevState) => ({
             ...prevState,
             companyname: "Only English letters and spaces!(min 3characters)",
@@ -47,9 +62,13 @@ export const companyValidation = (values, errors, setErrors) => {
     }
 }
 
-export const emailValidation = (values, errors, setErrors) => {
+export const emailValidation = (
+    values: IErrorsAndValues,
+    errors: IErrorsAndValues,
+    setErrors: Dispatch<SetStateAction<IErrorsAndValues>>
+) => {
     const reg = /[a-z0-9]+@[a-z]+\.[a-z]{2,3}/
-    if(!values.email.match(reg) || values.email === ''){
+    if(!values.email?.match(reg) || values.email === ''){
         setErrors((prevState) => ({...prevState, email: "Invalid Email!"}));
         return false
     } else {
@@ -58,9 +77,13 @@ export const emailValidation = (values, errors, setErrors) => {
     }
 };
 
-export const passwordValidation = (values, errors, setErrors) => {
+export const passwordValidation = (
+    values: IErrorsAndValues,
+    errors: IErrorsAndValues,
+    setErrors: Dispatch<SetStateAction<IErrorsAndValues>>
+) => {
     const reg = /^(?=.{6,})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+=]).*$/
-    if(!values.password.match(reg)){
+    if(!values.password?.match(reg)){
         setErrors((prevState) => ({...prevState, password: 'invalid password!'}));
         return false
     } else {
@@ -69,8 +92,12 @@ export const passwordValidation = (values, errors, setErrors) => {
     }
 }
 
-export const passwordCheck = (values, errors, setErrors) => {
-    if(values.password === values.confirmpassword && (values.password.length && values.confirmpassword.length)){
+export const passwordCheck = (
+    values: IErrorsAndValues,
+    errors: IErrorsAndValues,
+    setErrors: Dispatch<SetStateAction<IErrorsAndValues>>
+) => {
+    if(values.password === values.confirmpassword && (values.password?.length && values.confirmpassword?.length)){
         setErrors((prevState) => ({
             ...prevState,
             confirmpassword: '',
@@ -86,7 +113,13 @@ export const passwordCheck = (values, errors, setErrors) => {
     }
 }
 
-export const nameInputs = [
+type Inputs = {
+    id: string
+    name: string
+    type: string
+    label: string
+}
+export const nameInputs: Inputs[] = [
     {
         id: "1",
         name: 'firstname',
@@ -101,7 +134,7 @@ export const nameInputs = [
     }
 ]
 
-export const inputs = [
+export const inputs: Inputs[] = [
     {
         id: "3",
         name: 'companyname',
@@ -128,7 +161,7 @@ export const inputs = [
     },
 ]
 
-export const inputes = [
+export const inputes: Inputs[] = [
     {
         id: "7",
         name: 'email',

@@ -19,7 +19,7 @@ export const MyPieChart= () => {
         color?: string
     } | undefined
 
-    const myData: PieData[] = sellData.map((el) => {
+    const myData: PieData[] = sellData?.map((el) => {
         if(el.remains)
         return {
             name: el.store + ' ' + el.productName,
@@ -33,8 +33,8 @@ export const MyPieChart= () => {
     },[sellData])
 
     return (
-        <div className={ sellData.length > 1 ? styles.content__pie : styles.none}>
-            <Box sx={sellData.length > 1 ? {display:"flex", alignItems:'center'} : {display:"none"}}>
+        <div className={ (sellData?.length ?? 0) > 1 ? styles.content__pie : styles.none}>
+            <Box sx={(sellData?.length ?? 0) > 1 ? {display:"flex", alignItems:'center'} : {display:"none"}}>
                 <div className={styles.box_pie}>
                 <h1 style={{marginBottom:'24px'}}>Amount of sold products by name</h1>
                 <PieChart width={200} height={200}>

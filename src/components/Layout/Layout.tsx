@@ -55,11 +55,8 @@ export const Layout: FC<LayoutProps> = ({modal, setModal, data}) => {
 
     const auth = useAppSelector((state) => state.auth)
     const dispatch = useAppDispatch();
-
-    ///???
     const history = useLocation();
     const navigate = useNavigate();
-
     const [burgerActive, setBurgerActive] = useState<boolean>(false)
     const [active, setActive] = useState<string>(history.pathname)
     const reloadCount: number = Number(sessionStorage.getItem('reloadCount')) || 0;
@@ -72,11 +69,11 @@ export const Layout: FC<LayoutProps> = ({modal, setModal, data}) => {
             sessionStorage.removeItem('reloadCount');
         }
     }, []);
-    type TitleReturnType = {
+    type TitleReturn = {
         subtitle: string
         title: string
     }
-    const titles = (linkName:string): TitleReturnType | undefined  => {
+    const titles = (linkName:string): TitleReturn | undefined  => {
         if(linkName)
         switch (linkName) {
             case '/':

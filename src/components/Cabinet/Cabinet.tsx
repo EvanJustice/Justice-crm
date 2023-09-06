@@ -21,10 +21,10 @@ export const Cabinet = () =>{
     const onSubmit = () => {
         const userID: number = JSON.parse(localStorage.getItem('userID') ?? "")
         const usersArray: IUser[]  = JSON.parse(localStorage.getItem('users') ?? "")
-        const currentUser = usersArray.filter((el)=> (el.id === userID))[0]
+        const currentUser: IUser = usersArray.filter((el: IUser):boolean => (el.id === userID))[0]
 
         const newValues = (values: IErrorsAndValues) =>{
-            const val = {...values}
+            const val: IErrorsAndValues = {...values}
             delete val.password
             delete val.oldpassword
             return val
@@ -41,7 +41,7 @@ export const Cabinet = () =>{
                 }
             }
         }
-        const checkOld = () => {
+        const checkOld = (): boolean => {
             if(values.oldpassword === currentUser.password){
                 setErrors((prev) =>({...prev, oldpassword: ''}))
                 return true
