@@ -1,3 +1,52 @@
-/*.grid{*/
-/*    display: grid;*/
-/*}*/
+
+.content{
+    display: flex;
+    justify-content: center;
+    width: 1300px;
+    margin-top: 20px;
+    padding: 0 50px;
+}
+.content_{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
+    padding: 0 50px;
+}
+
+.twoCharts{
+    margin-right: 24px;
+    height: 534px;
+}
+
+@media (width < 1300px) {
+    .content{
+        width: 100%;
+    }
+    .content_{
+        align-items: center;
+        flex-direction: column;
+        height: max-content;
+    }
+    .twoCharts{
+        display: flex;
+        height: 280px;
+        margin-bottom: 24px;
+        flex-direction: row;
+        gap: 24px;
+        margin-right: 0;
+
+    }
+    html body {
+        overflow-y: auto;
+    }
+}
+@media (width < 800px){
+    .twoCharts{
+        flex-direction: column;
+        height: 100%;
+    }
+    .content_{
+        margin-top: 150px;
+    }
+}

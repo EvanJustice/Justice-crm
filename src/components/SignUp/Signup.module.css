@@ -4,6 +4,12 @@
     overflow-x: hidden;
     width: 100vw;
 }
+.content__{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
 
 .form_flexbox {
     display: flex;
@@ -60,6 +66,9 @@
     .content{
         padding-bottom: 0;
     }
+    .content_{
+        width: 100%;
+    }
     .image{
         display: none;
     }
@@ -91,8 +100,6 @@
     }
     .submit{
         width: 100%;
-        height: 40px;
-        margin: 0;
     }
 }
 
@@ -118,9 +125,5 @@
     }
     .signH1 {
         text-align: center;
-    }
-    .submit{
-        margin: 0;
-        height: 46px;
     }
 }

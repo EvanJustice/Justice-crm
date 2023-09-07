@@ -1,17 +1,26 @@
 import styles from './SellModal.module.css'
-import {useEffect, useState} from "react";
-import {TextField} from "@mui/material";
+import React, {ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useState} from "react";
+import {TextField, useMediaQuery} from "@mui/material";
+import {sellItem} from '../../redux/tableDataSlice'
+import {toggleOpen, switchAction} from "../../redux/snackBarSlice";
+import {useAppDispatch, useAppSelector} from "../../../hooks";
+import {IsellValue} from "../../types/MyTypes";
+interface ISellModalProps extends IsellValue{
+    show?: boolean
+    setShow: Dispatch<SetStateAction<boolean>>
+}
+export const SellModal: FC<ISellModalProps> = ({ sellValue, setSellValue, show, setShow}) => {
+    const dataEdit = useAppSelector((state) => state.tableData.dataEdit)
+    const dispatch = useAppDispatch();
+    const [remainsFocus, setRemainsFocus] = useState<boolean>(false);
+    const [lastSaleFocus, setLastSaleFocus] = useState<boolean>(false);
+    const [zeroValue1, setZeroValue1] = useState<string>('')
+    const [zeroValue2, setZeroValue2] = useState<string>('')
+    const [errorRemains, setErrorRemains] = useState<string>('')
+    const [errorLastSale, setErrorLastSale] = useState<string>('')
+    const is720 = useMediaQuery('(min-width:800px)')
 
-export const SellModal = ({dataEdit, sellValue, setSellValue, show, setShow, setTableData, tableData, setSellData, sellData}) => {
-
-    const [remainsFocus, setRemainsFocus] = useState(false);
-    const [lastSaleFocus, setLastSaleFocus] = useState(false);
-    const [zeroValue1, setZeroValue1] = useState('')
-    const [zeroValue2, setZeroValue2] = useState('')
-    const [errorRemains, setErrorRemains] = useState('')
-    const [errorLastSale, setErrorLastSale] = useState('')
-
-    const blurHandler = (e) => {
+    const blurHandler = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement, Element>) => {
         switch (e.target.name) {
             case 'remains':
                 setRemainsFocus(true)
@@ -30,45 +39,14 @@ export const SellModal = ({dataEdit, sellValue, setSellValue, show, setShow, set
         setErrorLastSale("")
         setShow(!show)
     }
-    const fixDataValue = (d) => {
+    const fixDataValue = (d:string) => {
         const year = d?.slice(0,4)
         const month = d?.slice(5,7)
         const day = d?.slice(8,10)
         return `${day}.${month}.${year}`
     }
 
-    const sellProduct = (e) => {
-        const updateState = () => {
-            const tableFix = tableData?.map(item => {
-                if (item?.key === dataEdit?.key) {
-                    return {
-                        ...dataEdit,
-                        remains: `${+dataEdit?.remains - sellValue?.remains}`,
-                        lastSale: fixDataValue(sellValue?.lastSale)}
-                }
-                return item;
-            });
-            const zeroFilter = tableFix.filter((e)=> (+e.remains > 0))
-            const hasSellItem = sellData?.filter((el) => el?.key === dataEdit?.key);
-            const tableSellFix = sellData?.map(item => {
-                if (item?.key === dataEdit?.key) {
-                    return {
-                        ...dataEdit,
-                        remains: Number(item?.remains) + Number(sellValue?.remains),
-                        lastSale: fixDataValue(sellValue?.lastSale)}
-                }
-                return item;
-            });
-            setTableData(zeroFilter.length ? tableFix : zeroFilter);
-            setSellData(hasSellItem?.length > 0
-                ? tableSellFix
-                : [{
-                    ...dataEdit,
-                    remains: `${sellValue.remains}`,
-                    lastSale: fixDataValue(sellValue?.lastSale)
-                },
-                    ...sellData
-                ])}
+    const sellProduct = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         e.preventDefault();
         if(!sellValue?.hasOwnProperty('remains')){
             setZeroValue1('введите количество товаров')
@@ -84,49 +62,53 @@ export const SellModal = ({dataEdit, sellValue, setSellValue, show, setShow, set
             sellValue.hasOwnProperty('remains') &&
             sellValue.hasOwnProperty('lastSale')
         ){
-            updateState();
+            dispatch(sellItem(sellValue))
             setSellValue(null)
             setZeroValue1("")
             setZeroValue2("")
             setErrorRemains("")
             setErrorLastSale("")
-            setShow(!show);}
+            setShow(!show);
+            dispatch(switchAction('sell'))
+            dispatch(toggleOpen())}
     }
 
-    const onChangeRemains = (e) => {
+    const onChangeRemains = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setSellValue({...sellValue, [e.target.name]: e.target.value});
         if(!e.target.value || e.target.value.length < 1){
             setZeroValue1('введите количество товара')
         } else {
             setZeroValue1('')
         }
-        if(+e.target.value > +dataEdit.remains){
+        if(+e.target.value > +dataEdit.remains!){
             setErrorRemains('у вас нет столько товаров')
+        } else if (+e.target.value < 1){
+            setErrorRemains('так нельзя')
         } else {
             setErrorRemains('')
         }
     }
     useEffect(() => {
-        dateValidation(dataEdit?.creationDate, sellValue?.lastSale);
+        dateValidation(dataEdit?.creationDate, sellValue?.lastSale as string);
     },[sellValue?.lastSale, dataEdit?.creationDate])
-    const dateValidation = (createDate, saleDate) =>{
-        const dateIntegrator = (d) => {
+    const dateValidation = (createDate: string | undefined, saleDate: string | undefined) =>{
+        const dateIntegrator = (d:string):number => {
             const y = +d?.slice(6)
             const m = +d?.slice(3,5) * 0.1
             const day = +d?.slice(0,2) * 0.001
             return y + m + day
         }
-        if(dateIntegrator(fixDataValue(saleDate)) > dateIntegrator(createDate)
-            || dateIntegrator(fixDataValue(saleDate)) === dateIntegrator(createDate)){
+        if(dateIntegrator(fixDataValue(saleDate!)) > dateIntegrator(createDate!)
+            || dateIntegrator(fixDataValue(saleDate!)) === dateIntegrator(createDate!)){
             setErrorLastSale('')
         } else {
             setErrorLastSale('Вы не можете продать товар раньше его создания');
-            if(!dateIntegrator(fixDataValue(saleDate))){
+            if(!dateIntegrator(fixDataValue(saleDate!))){
                 setErrorLastSale("")
             }
         }
     }
-    const onChangeLastSale = (e) => {
+    const onChangeLastSale = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setSellValue({...sellValue, [e.target.name]: e.target.value});
         if(!e.target.value){
             setZeroValue2('введите дату')
@@ -134,7 +116,7 @@ export const SellModal = ({dataEdit, sellValue, setSellValue, show, setShow, set
             setZeroValue2('')
         }
     }
-    const clickOutside = (e) => {
+    const clickOutside = (e: React.MouseEvent<HTMLDivElement>) => {
         if(e.target === e.currentTarget){
             setSellValue(null)
             setZeroValue1("")
@@ -153,26 +135,28 @@ export const SellModal = ({dataEdit, sellValue, setSellValue, show, setShow, set
                     <TextField
                         className={styles.input}
                         type="number"
-                        error={zeroValue1 || errorRemains}
+                        error={Boolean(zeroValue1) || Boolean(errorRemains)}
                         helperText={zeroValue1 || errorRemains}
                         variant='outlined'
                         name='remains'
                         label='Number of products'
-                        margin='normal'
+                        margin={is720 ? 'normal' : 'none'}
+                        size={is720 ? 'medium' : 'small'}
                         value={sellValue && sellValue?.remains ? sellValue?.remains : ''}
                         onChange={(e) => onChangeRemains(e)}
-                        onBlur={blurHandler}
+                        onBlur={()=> blurHandler}
                     />
                 </div>
                 <div className={styles.text_field}>
                     <TextField
                         className={styles.input}
                         type={lastSaleFocus ? 'date' : 'text'}
-                        error={zeroValue2 || errorLastSale}
+                        error={Boolean(zeroValue2) || Boolean(errorLastSale)}
                         helperText={zeroValue2 || errorLastSale}
                         variant='outlined'
                         name="lastSale"
-                        margin='normal'
+                        margin={is720 ? 'normal' : 'none'}
+                        size={is720 ? 'medium' : 'small'}
                         value={sellValue &&  sellValue?.lastSale ? sellValue?.lastSale : ''}
                         label='Date of sale'
                         onFocus={(e)=>blurHandler(e)}

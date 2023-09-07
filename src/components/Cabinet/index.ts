@@ -1,0 +1,42 @@
+import {IUser, IInputs} from "../../types/MyTypes";
+
+const userID = JSON.parse(localStorage.getItem('userID')??"")
+const usersArray: IUser[] = JSON.parse(localStorage.getItem('users')??"")
+export const currentUser = usersArray?.filter((el)=> (el?.id === userID))[0]
+export const inputs: IInputs[] = [
+    {   name: 'firstname',
+        label: 'First name',
+        defaultValue: currentUser?.firstname ?? '',
+        type: 'text',
+        classname: 'box1'},
+    {   name: 'lastname',
+        label: 'Last name',
+        defaultValue: currentUser?.lastname ?? '',
+        type: 'text',
+        classname: 'box2'},
+    {   name: 'companyname',
+        label: 'Company name',
+        defaultValue: currentUser?.companyname ?? '',
+        type: 'text',
+        classname: 'box3'},
+    {   name: 'email',
+        label: 'Email',
+        defaultValue: currentUser?.email ?? '',
+        type: 'text',
+        classname: 'box4'},
+    {   name: 'address',
+        label: 'Address',
+        defaultValue: currentUser?.address ?? '',
+        type: 'text',
+        classname: 'box5'},
+    {   name: 'oldpassword',
+        label: 'Enter old password',
+        defaultValue: '',
+        type: 'password',
+        classname: 'box6'},
+    {   name: 'password',
+        label: 'Enter a new password',
+        defaultValue: '',
+        type: 'password',
+        classname: 'box7'},
+]
